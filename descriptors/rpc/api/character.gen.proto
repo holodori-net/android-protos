@@ -1,0 +1,39 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "rpc/api/common/response.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message CharacterReadRequest {
+  string character_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message CharacterReadParkRequest {
+  string character_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message CharacterReadResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message CharacterReadParkResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Character {
+  rpc Read (.rpc.api.CharacterReadRequest) returns (.rpc.api.CharacterReadResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Character/Read", body: "*" };
+  }
+  rpc ReadPark (.rpc.api.CharacterReadParkRequest) returns (.rpc.api.CharacterReadParkResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Character/ReadPark", body: "*" };
+  }
+}

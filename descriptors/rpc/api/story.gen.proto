@@ -1,0 +1,108 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message StoryReadMainRequest {
+  string main_story_chapter_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  bool is_skipped = 3;
+}
+
+message StoryReadMainResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message StoryReadAreaRequest {
+  string area_story_chapter_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  bool is_skipped = 3;
+}
+
+message StoryReadAreaResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message StoryReadCharacterRequest {
+  string character_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  bool is_skipped = 3;
+}
+
+message StoryReadCharacterResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message StoryReadCharacterGroupResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+}
+
+message StoryReadEventRequest {
+  string event_story_chapter_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  bool is_skipped = 3;
+}
+
+message StoryReadEventResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message StoryReadSpecialRequest {
+  string special_story_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  bool is_skipped = 2;
+}
+
+message StoryReadSpecialResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message StoryReadHolograRequest {
+  string hologra_story_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  bool is_skipped = 2;
+}
+
+message StoryReadHolograResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Story {
+  rpc ReadMain (.rpc.api.StoryReadMainRequest) returns (.rpc.api.StoryReadMainResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Story/ReadMain", body: "*" };
+  }
+  rpc ReadArea (.rpc.api.StoryReadAreaRequest) returns (.rpc.api.StoryReadAreaResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Story/ReadArea", body: "*" };
+  }
+  rpc ReadCharacter (.rpc.api.StoryReadCharacterRequest) returns (.rpc.api.StoryReadCharacterResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Story/ReadCharacter", body: "*" };
+  }
+  rpc ReadEvent (.rpc.api.StoryReadEventRequest) returns (.rpc.api.StoryReadEventResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Story/ReadEvent", body: "*" };
+  }
+  rpc ReadSpecial (.rpc.api.StoryReadSpecialRequest) returns (.rpc.api.StoryReadSpecialResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Story/ReadSpecial", body: "*" };
+  }
+  rpc ReadHologra (.rpc.api.StoryReadHolograRequest) returns (.rpc.api.StoryReadHolograResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Story/ReadHologra", body: "*" };
+  }
+}

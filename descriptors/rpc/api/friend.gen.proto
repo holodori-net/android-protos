@@ -1,0 +1,123 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "enums/friend_status_type.gen.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/profile.gen.proto";
+import "rpc/api/common/response.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message FriendTopResponse {
+  repeated .rpc.api.common.BasicUserInfo friend_user_infos = 1 [(options.zap.hidden) = true];
+  repeated .rpc.api.common.BasicUserInfo offer_user_infos = 2 [(options.zap.hidden) = true];
+  repeated .rpc.api.common.BasicUserInfo offer_received_user_infos = 3 [(options.zap.hidden) = true];
+  repeated .rpc.api.FriendTopResponse.LatestPlayedUserInfo latest_played_user_infos = 4 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+  message LatestPlayedUserInfo {
+    .rpc.api.common.BasicUserInfo user_info = 1;
+    .enums.FriendStatusType friend_status_type = 2;
+  }
+}
+
+message FriendTopReloadResponse {
+  repeated .rpc.api.common.BasicUserInfo friend_user_infos = 1 [(options.zap.hidden) = true];
+  repeated .rpc.api.common.BasicUserInfo offer_user_infos = 2 [(options.zap.hidden) = true];
+  repeated .rpc.api.common.BasicUserInfo offer_received_user_infos = 3 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message FriendSearchUserRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message FriendSearchUserResponse {
+  .rpc.api.common.BasicUserInfo user_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message FriendDeleteFriendRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message FriendOfferRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message FriendApproveOfferRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message FriendCancelOfferRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message FriendRejectOfferRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message FriendDeleteFriendResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message FriendOfferResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message FriendApproveOfferResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message FriendCancelOfferResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message FriendRejectOfferResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Friend {
+  rpc Top (.google.protobuf.Empty) returns (.rpc.api.FriendTopResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Friend/Top", body: "*" };
+  }
+  rpc TopReload (.google.protobuf.Empty) returns (.rpc.api.FriendTopReloadResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Friend/TopReload", body: "*" };
+  }
+  rpc SearchUser (.rpc.api.FriendSearchUserRequest) returns (.rpc.api.FriendSearchUserResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_FRIEND_SEARCH_USER_NOT_FOUND, error_codes: ERROR_CODE_FRIEND_SEARCH_USER_MYSELF };
+    option (google.api.http) = { post: "/Friend/SearchUser", body: "*" };
+  }
+  rpc DeleteFriend (.rpc.api.FriendDeleteFriendRequest) returns (.rpc.api.FriendDeleteFriendResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/Friend/DeleteFriend", body: "*" };
+  }
+  rpc Offer (.rpc.api.FriendOfferRequest) returns (.rpc.api.FriendOfferResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_FRIEND_OFFER_COUNT_LIMIT_EXCEEDED, error_codes: ERROR_CODE_FRIEND_RECEIVED_OFFER_COUNT_LIMIT_EXCEEDED, error_codes: ERROR_CODE_FRIEND_SELF_FRIEND_COUNT_LIMIT_EXCEEDED, error_codes: ERROR_CODE_FRIEND_TARGET_USER_FRIEND_COUNT_LIMIT_EXCEEDED, error_codes: ERROR_CODE_FRIEND_ALREADY_OFFERED, error_codes: ERROR_CODE_FRIEND_ALREADY_OFFER_RECEIVED, error_codes: ERROR_CODE_FRIEND_ALREADY_FRIEND, error_codes: ERROR_CODE_FRIEND_OFFER_BLOCKED, error_codes: ERROR_CODE_TARGET_USER_BANNED, error_codes: ERROR_CODE_TARGET_USER_DELETED, error_codes: ERROR_CODE_BLOCKED_TARGET_USER, error_codes: ERROR_CODE_FRIEND_RECEIVE_OFFER_COUNT_RATE_LIMIT_EXCEEDED };
+    option (google.api.http) = { post: "/Friend/Offer", body: "*" };
+  }
+  rpc ApproveOffer (.rpc.api.FriendApproveOfferRequest) returns (.rpc.api.FriendApproveOfferResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_FRIEND_SELF_FRIEND_COUNT_LIMIT_EXCEEDED, error_codes: ERROR_CODE_FRIEND_TARGET_USER_FRIEND_COUNT_LIMIT_EXCEEDED, error_codes: ERROR_CODE_FRIEND_RECEIVED_OFFER_NOT_FOUND, error_codes: ERROR_CODE_TARGET_USER_BANNED, error_codes: ERROR_CODE_TARGET_USER_DELETED };
+    option (google.api.http) = { post: "/Friend/ApproveOffer", body: "*" };
+  }
+  rpc CancelOffer (.rpc.api.FriendCancelOfferRequest) returns (.rpc.api.FriendCancelOfferResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_FRIEND_OFFER_NOT_FOUND };
+    option (google.api.http) = { post: "/Friend/CancelOffer", body: "*" };
+  }
+  rpc RejectOffer (.rpc.api.FriendRejectOfferRequest) returns (.rpc.api.FriendRejectOfferResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/Friend/RejectOffer", body: "*" };
+  }
+}

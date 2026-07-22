@@ -1,0 +1,18 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package entity.master;
+
+import "entity/master/options/master.proto";
+import "enums/reset_interval_type.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/master";
+option csharp_namespace = "Vision.Common.Proto.Master";
+
+message ExchangeBoothFixedItem {
+  option (options.master.table) = true;
+  string id = 1 [(options.master.pk) = true];
+  string exchange_booth_id = 2 [(options.master.fk) = "ExchangeBooth:id"];
+  int32 purchase_limit_quantity = 14 [(options.master.optional) = true];
+  .enums.ResetIntervalType reset_interval_type = 17 [(options.master.optional) = true];
+}

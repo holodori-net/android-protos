@@ -1,0 +1,57 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+import "rpc/api/common/shop.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message ShopListResponse {
+  repeated .rpc.api.common.Shop shops = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ShopPurchaseConsumptionItemRequest {
+  string shop_consumption_item_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 quantity = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ShopPurchaseConsumptionItemResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Shop shop = 2;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ShopReadRequest {
+  string shop_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated string shop_charge_item_consumable_shop_charge_item_ids = 2 [(buf.validate.field) = { repeated: { items: { string: { min_bytes: 1 } } } }];
+  repeated string shop_consumption_item_ids = 3 [(buf.validate.field) = { repeated: { items: { string: { min_bytes: 1 } } } }];
+}
+
+message ShopReadResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Shop {
+  rpc List (.google.protobuf.Empty) returns (.rpc.api.ShopListResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Shop/List", body: "*" };
+  }
+  rpc PurchaseConsumptionItem (.rpc.api.ShopPurchaseConsumptionItemRequest) returns (.rpc.api.ShopPurchaseConsumptionItemResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_SHOP_OUT_OF_TERM };
+    option (google.api.http) = { post: "/Shop/PurchaseConsumptionItem", body: "*" };
+  }
+  rpc Read (.rpc.api.ShopReadRequest) returns (.rpc.api.ShopReadResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Shop/Read", body: "*" };
+  }
+}

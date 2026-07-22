@@ -1,0 +1,46 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "rpc/api/common/mission.gen.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message EventMissionReadEventMissionRequest {
+  string event_mission_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message EventMissionReceiveMissionRewardRequest {
+  string event_mission_id = 1;
+  string marathon_chapter_id = 2;
+  string marathon_id = 3;
+  repeated .rpc.api.common.Mission missions = 4 [(buf.validate.field) = { repeated: { min_items: 1, max_items: 200 } }];
+}
+
+message EventMissionReceiveMissionRewardResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message EventMissionReadEventMissionResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service EventMission {
+  rpc ReadEventMission (.rpc.api.EventMissionReadEventMissionRequest) returns (.rpc.api.EventMissionReadEventMissionResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/EventMission/ReadEventMission", body: "*" };
+  }
+  rpc ReceiveMissionReward (.rpc.api.EventMissionReceiveMissionRewardRequest) returns (.rpc.api.EventMissionReceiveMissionRewardResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_EVENT_OUT_OF_TERM };
+    option (google.api.http) = { post: "/EventMission/ReceiveMissionReward", body: "*" };
+  }
+}

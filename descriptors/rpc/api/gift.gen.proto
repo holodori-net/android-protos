@@ -1,0 +1,100 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "enums/gift_sort_type.gen.proto";
+import "enums/resource_type.gen.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message GiftItem {
+  string gift_id = 1;
+  .enums.ResourceType resource_type = 2;
+  string resource_id = 3;
+  int64 quantity = 4;
+  string description = 5 [(options.zap.hidden) = true];
+  int64 posted_time = 6;
+  int64 limit_time = 7;
+}
+
+message GiftTopResponse {
+  repeated .rpc.api.GiftItem items = 1;
+  int32 count = 2;
+  bool is_next = 3;
+  int32 unread_announcement_count = 4;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message GiftListRequest {
+  int32 offset = 1 [(buf.validate.field) = { int32: { gte: 0 } }];
+  .enums.GiftSortType sort_type = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  bool is_desc = 3;
+}
+
+message GiftListResponse {
+  repeated .rpc.api.GiftItem items = 1;
+  int32 count = 2;
+  bool is_next = 3;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message GiftOpenRequest {
+  repeated string gift_ids = 1 [(buf.validate.field) = { repeated: { min_items: 1 } }];
+}
+
+message GiftOpenResponse {
+  repeated .rpc.api.common.RewardResult results = 1;
+  repeated string opened_gift_ids = 2;
+  repeated string unopened_gift_ids = 3;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message GiftListHistoryResponse {
+  repeated .rpc.api.GiftListHistoryResponse.GiftHistoryItem items = 1;
+  .rpc.api.common.Response common_response = 9999;
+  message GiftHistoryItem {
+    .enums.ResourceType resource_type = 1;
+    string resource_id = 2;
+    int64 quantity = 3;
+    string description = 4 [(options.zap.hidden) = true];
+    int64 opened_time = 5;
+  }
+}
+
+message GiftCountResponse {
+  int32 count = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Gift {
+  rpc Top (.google.protobuf.Empty) returns (.rpc.api.GiftTopResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Gift/Top", body: "*" };
+  }
+  rpc List (.rpc.api.GiftListRequest) returns (.rpc.api.GiftListResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Gift/List", body: "*" };
+  }
+  rpc Open (.rpc.api.GiftOpenRequest) returns (.rpc.api.GiftOpenResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_GIFT_REWARD_EXPIRED };
+    option (google.api.http) = { post: "/Gift/Open", body: "*" };
+  }
+  rpc ListHistory (.google.protobuf.Empty) returns (.rpc.api.GiftListHistoryResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Gift/ListHistory", body: "*" };
+  }
+  rpc Count (.google.protobuf.Empty) returns (.rpc.api.GiftCountResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Gift/Count", body: "*" };
+  }
+}

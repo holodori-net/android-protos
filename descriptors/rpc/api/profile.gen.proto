@@ -1,0 +1,220 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "common/emblem_position.gen.proto";
+import "enums/complain_category_type.gen.proto";
+import "enums/profile_publish_type.gen.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/profile.gen.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/storage_url.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message ProfileSetNameRequest {
+  string name = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ProfileSetMessageRequest {
+  string message = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ProfileSetFanMarkRequest {
+  string fan_mark_id = 1;
+}
+
+message ProfileSwitchPublishSettingRequest {
+  .enums.ProfilePublishType profile_publish_type = 1 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  bool is_publish = 2;
+}
+
+message ProfileSetEmblemRequest {
+  repeated .common.EmblemPosition emblem_positions = 1 [(buf.validate.field) = { repeated: { max_items: 5 } }];
+}
+
+message ProfileGetUserProfileDetailRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ProfileGetUserProfileDetailResponse {
+  .rpc.api.common.UserProfileDetailInfo user_profile_detail_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileBlockUserRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ProfileUnblockUserRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ProfileListBlockedUserResponse {
+  repeated .rpc.api.common.BasicUserInfo user_infos = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileComplainUserRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated .enums.ComplainCategoryType category_types = 2 [(buf.validate.field) = { repeated: { unique: true, items: { enum: { defined_only: true, not_in: 0 } } } }];
+  string message = 3 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ProfileListCustomPaletteResponse {
+  repeated .rpc.api.common.CustomPalette custom_palettes = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileGetCustomPaletteImageUploadUrlRequest {
+  int32 number = 1 [(buf.validate.field) = { int32: { gte: 0 } }];
+}
+
+message ProfileGetCustomPaletteImageUploadUrlResponse {
+  string upload_token = 1 [(options.zap.hidden) = true];
+  .rpc.api.common.StorageUrlInfo storage_url_info = 2 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileEditCustomPaletteRequest {
+  string upload_token = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }, (options.zap.hidden) = true];
+  int32 number = 2 [(buf.validate.field) = { int32: { gte: 0 } }];
+  string custom_palette_preset_layout_group_id = 3;
+  .rpc.api.common.CustomPaletteBackground background = 4;
+  repeated .rpc.api.common.CustomPalettePart parts = 5 [(buf.validate.field) = { repeated: { max_items: 100 } }];
+}
+
+message ProfileEditCustomPaletteResponse {
+  int32 number = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileSetCustomPaletteRequest {
+  int32 number = 1 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ProfileDeleteCustomPaletteRequest {
+  int32 number = 1 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ProfileSetNameResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileSetMessageResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileSetFanMarkResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileSwitchPublishSettingResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileSetEmblemResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileBlockUserResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileUnblockUserResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileComplainUserResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileSetCustomPaletteResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileDeleteCustomPaletteResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ProfileSetDefaultCustomPaletteResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Profile {
+  rpc SetName (.rpc.api.ProfileSetNameRequest) returns (.rpc.api.ProfileSetNameResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_NG_WORD_CONTAINS };
+    option (google.api.http) = { post: "/Profile/SetName", body: "*" };
+  }
+  rpc SetMessage (.rpc.api.ProfileSetMessageRequest) returns (.rpc.api.ProfileSetMessageResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_NG_WORD_CONTAINS };
+    option (google.api.http) = { post: "/Profile/SetMessage", body: "*" };
+  }
+  rpc SetFanMark (.rpc.api.ProfileSetFanMarkRequest) returns (.rpc.api.ProfileSetFanMarkResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/SetFanMark", body: "*" };
+  }
+  rpc SwitchPublishSetting (.rpc.api.ProfileSwitchPublishSettingRequest) returns (.rpc.api.ProfileSwitchPublishSettingResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/SwitchPublishSetting", body: "*" };
+  }
+  rpc SetEmblem (.rpc.api.ProfileSetEmblemRequest) returns (.rpc.api.ProfileSetEmblemResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/SetEmblem", body: "*" };
+  }
+  rpc GetUserProfileDetail (.rpc.api.ProfileGetUserProfileDetailRequest) returns (.rpc.api.ProfileGetUserProfileDetailResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_TARGET_USER_BANNED };
+    option (google.api.http) = { post: "/Profile/GetUserProfileDetail", body: "*" };
+  }
+  rpc BlockUser (.rpc.api.ProfileBlockUserRequest) returns (.rpc.api.ProfileBlockUserResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_BLOCKED_USER_COUNT_LIMIT_EXCEEDED };
+    option (google.api.http) = { post: "/Profile/BlockUser", body: "*" };
+  }
+  rpc UnblockUser (.rpc.api.ProfileUnblockUserRequest) returns (.rpc.api.ProfileUnblockUserResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/UnblockUser", body: "*" };
+  }
+  rpc ListBlockedUser (.google.protobuf.Empty) returns (.rpc.api.ProfileListBlockedUserResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/ListBlockedUser", body: "*" };
+  }
+  rpc ComplainUser (.rpc.api.ProfileComplainUserRequest) returns (.rpc.api.ProfileComplainUserResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_COMPLAIN_USER_COUNT_RATE_LIMIT_EXCEEDED };
+    option (google.api.http) = { post: "/Profile/ComplainUser", body: "*" };
+  }
+  rpc ListCustomPalette (.google.protobuf.Empty) returns (.rpc.api.ProfileListCustomPaletteResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/ListCustomPalette", body: "*" };
+  }
+  rpc GetCustomPaletteImageUploadUrl (.rpc.api.ProfileGetCustomPaletteImageUploadUrlRequest) returns (.rpc.api.ProfileGetCustomPaletteImageUploadUrlResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/GetCustomPaletteImageUploadUrl", body: "*" };
+  }
+  rpc EditCustomPalette (.rpc.api.ProfileEditCustomPaletteRequest) returns (.rpc.api.ProfileEditCustomPaletteResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/EditCustomPalette", body: "*" };
+  }
+  rpc SetCustomPalette (.rpc.api.ProfileSetCustomPaletteRequest) returns (.rpc.api.ProfileSetCustomPaletteResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/SetCustomPalette", body: "*" };
+  }
+  rpc DeleteCustomPalette (.rpc.api.ProfileDeleteCustomPaletteRequest) returns (.rpc.api.ProfileDeleteCustomPaletteResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/DeleteCustomPalette", body: "*" };
+  }
+  rpc SetDefaultCustomPalette (.google.protobuf.Empty) returns (.rpc.api.ProfileSetDefaultCustomPaletteResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Profile/SetDefaultCustomPalette", body: "*" };
+  }
+}

@@ -1,0 +1,69 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "common/consumption.gen.proto";
+import "enums/mini_game_type.gen.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message MiniGameRecoverRewardUpStaminaRequest {
+  repeated .common.Consumption consumptions = 1 [(buf.validate.field) = { repeated: { min_items: 1 } }];
+}
+
+message MiniGameConvertRewardUpStaminaToRewardRequest {
+  string mini_game_reward_up_stamina_conversion_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 conversion_count = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message MiniGameConvertRewardUpStaminaToRewardResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MiniGameReadNotificationRequest {
+  repeated .enums.MiniGameType read_mini_game_types = 1 [(buf.validate.field) = { repeated: { min_items: 1, items: { enum: { defined_only: true, not_in: 0 } } } }];
+}
+
+message MiniGameSetConsumptionSettingRequest {
+  .enums.MiniGameType mini_game_type = 1 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  int64 quantity = 2 [(buf.validate.field) = { int64: { gte: 0 } }];
+}
+
+message MiniGameRecoverRewardUpStaminaResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MiniGameReadNotificationResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MiniGameSetConsumptionSettingResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service MiniGame {
+  rpc RecoverRewardUpStamina (.rpc.api.MiniGameRecoverRewardUpStaminaRequest) returns (.rpc.api.MiniGameRecoverRewardUpStaminaResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/MiniGame/RecoverRewardUpStamina", body: "*" };
+  }
+  rpc ConvertRewardUpStaminaToReward (.rpc.api.MiniGameConvertRewardUpStaminaToRewardRequest) returns (.rpc.api.MiniGameConvertRewardUpStaminaToRewardResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/MiniGame/ConvertRewardUpStaminaToReward", body: "*" };
+  }
+  rpc ReadNotification (.rpc.api.MiniGameReadNotificationRequest) returns (.rpc.api.MiniGameReadNotificationResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/MiniGame/ReadNotification", body: "*" };
+  }
+  rpc SetConsumptionSetting (.rpc.api.MiniGameSetConsumptionSettingRequest) returns (.rpc.api.MiniGameSetConsumptionSettingResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/MiniGame/SetConsumptionSetting", body: "*" };
+  }
+}

@@ -1,0 +1,16 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api.common;
+
+import "rpc/api/common/mission.gen.proto";
+import "rpc/api/common/user_data.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/common_api";
+option csharp_namespace = "Vision.Common.Proto.Api.Common";
+
+message Response {
+  .rpc.api.common.UserData updated_data = 1;
+  .rpc.api.common.UserData deleted_data = 2;
+  repeated .rpc.api.common.UpdatedMission updated_missions = 3;
+}

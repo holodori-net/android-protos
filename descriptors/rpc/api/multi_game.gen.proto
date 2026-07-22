@@ -1,0 +1,237 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "enums/multi_game_rematch_status_type.gen.proto";
+import "enums/multi_game_rematch_type.gen.proto";
+import "enums/multi_game_type.gen.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/multi_game.gen.proto";
+import "rpc/api/common/profile.gen.proto";
+import "rpc/api/common/response.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message MultiGameListPingServerResponse {
+  repeated .rpc.api.MultiGameListPingServerResponse.PingServer servers = 1;
+  .rpc.api.common.Response common_response = 9999;
+  message PingServer {
+    string region = 1;
+    string endpoint = 2;
+  }
+}
+
+message MultiGameGeneratePrivateRoomIdResponse {
+  string private_room_id = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameGetPrivateRoomInfoRequest {
+  string private_room_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MultiGameGetPrivateRoomInfoResponse {
+  .enums.MultiGameType multi_game_type = 1;
+  string multi_game_id = 2;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameEnterPrivateRoomRequest {
+  string private_room_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MultiGameEnterPrivateRoomResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameInviteFriendToPrivateRoomRequest {
+  string private_room_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated string public_user_ids = 2 [(buf.validate.field) = { repeated: { min_items: 1 } }];
+}
+
+message MultiGameInviteAllFriendToPrivateRoomRequest {
+  string private_room_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MultiGameListPrivateRoomFriendUserRequest {
+  string private_room_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MultiGameListPrivateRoomFriendUserResponse {
+  bool is_all_friend_invited = 1;
+  repeated .rpc.api.MultiGameListPrivateRoomFriendUserResponse.FriendUser friend_users = 2;
+  .rpc.api.common.Response common_response = 9999;
+  message FriendUser {
+    .rpc.api.common.BasicUserInfo user_info = 1;
+    bool is_latest_played_user = 2;
+    bool is_private_room_invited = 3;
+  }
+}
+
+message MultiGameCheckInvitedPrivateRoomResponse {
+  string last_invited_private_room_id = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameListInvitedPrivateRoomResponse {
+  repeated .rpc.api.MultiGameListInvitedPrivateRoomResponse.InvitedPrivateRoom invited_private_rooms = 1;
+  .rpc.api.common.Response common_response = 9999;
+  message InvitedPrivateRoom {
+    string private_room_id = 1;
+    .enums.MultiGameType multi_game_type = 2;
+    .rpc.api.common.BasicUserInfo host_user_info = 3;
+  }
+}
+
+message MultiGameCheckMatchStatusRequest {
+  string ticket_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MultiGameCheckMatchStatusResponse {
+  bool is_matched = 1;
+  string ip = 2;
+  uint32 port = 3;
+  string token = 4 [(options.zap.hidden) = true];
+  string private_room_id = 5;
+  .enums.MultiGameType multi_game_type = 6;
+  string tls_server_common_name = 7;
+  string tls_client_cert = 8;
+  string dgs_name = 9;
+  string dgs_log_id = 10;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameCancelMatchRequest {
+  string ticket_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MultiGameSetPrivateRoomRematchStatusRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  .enums.MultiGameRematchType rematch_type = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  string private_room_id = 3;
+  repeated string invitation_public_user_ids = 100;
+  .enums.MultiGameType multi_game_type = 101;
+  string multi_game_id = 102;
+}
+
+message MultiGameCheckPrivateRoomRematchStatusRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MultiGameCheckPrivateRoomRematchStatusResponse {
+  .enums.MultiGameRematchStatusType rematch_status_type = 1;
+  string private_room_id = 2;
+  .enums.MultiGameType multi_game_type = 3;
+  string multi_game_id = 4;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameListBasicUserInfoRequest {
+  repeated string public_user_ids = 1 [(buf.validate.field) = { repeated: { min_items: 1, items: { string: { min_bytes: 1 } } } }];
+  string private_room_id = 2;
+}
+
+message MultiGameListBasicUserInfoResponse {
+  repeated .rpc.api.common.BasicUserInfo user_infos = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameSaveReactionSendInfoRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 2 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+  repeated .rpc.api.common.MultiGameParkEmotionSendInfo park_emotion_send_infos = 3 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+}
+
+message MultiGameInviteFriendToPrivateRoomResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameInviteAllFriendToPrivateRoomResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameCancelMatchResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameSetPrivateRoomRematchStatusResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MultiGameSaveReactionSendInfoResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service MultiGame {
+  rpc ListPingServer (.google.protobuf.Empty) returns (.rpc.api.MultiGameListPingServerResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/ListPingServer", body: "*" };
+  }
+  rpc GeneratePrivateRoomId (.google.protobuf.Empty) returns (.rpc.api.MultiGameGeneratePrivateRoomIdResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/GeneratePrivateRoomId", body: "*" };
+  }
+  rpc GetPrivateRoomInfo (.rpc.api.MultiGameGetPrivateRoomInfoRequest) returns (.rpc.api.MultiGameGetPrivateRoomInfoResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_NOT_FOUND, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_NOT_ACTIVE };
+    option (google.api.http) = { post: "/MultiGame/GetPrivateRoomInfo", body: "*" };
+  }
+  rpc EnterPrivateRoom (.rpc.api.MultiGameEnterPrivateRoomRequest) returns (.rpc.api.MultiGameEnterPrivateRoomResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_NOT_FOUND, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_NOT_ACTIVE, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_ENTER_COUNT_RATE_LIMIT_EXCEEDED };
+    option (google.api.http) = { post: "/MultiGame/EnterPrivateRoom", body: "*" };
+  }
+  rpc InviteFriendToPrivateRoom (.rpc.api.MultiGameInviteFriendToPrivateRoomRequest) returns (.rpc.api.MultiGameInviteFriendToPrivateRoomResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/InviteFriendToPrivateRoom", body: "*" };
+  }
+  rpc InviteAllFriendToPrivateRoom (.rpc.api.MultiGameInviteAllFriendToPrivateRoomRequest) returns (.rpc.api.MultiGameInviteAllFriendToPrivateRoomResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/InviteAllFriendToPrivateRoom", body: "*" };
+  }
+  rpc ListPrivateRoomFriendUser (.rpc.api.MultiGameListPrivateRoomFriendUserRequest) returns (.rpc.api.MultiGameListPrivateRoomFriendUserResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/ListPrivateRoomFriendUser", body: "*" };
+  }
+  rpc CheckInvitedPrivateRoom (.google.protobuf.Empty) returns (.rpc.api.MultiGameCheckInvitedPrivateRoomResponse) {
+    option (options.check_option.check) = { disabled_master_version: true };
+    option (google.api.http) = { post: "/MultiGame/CheckInvitedPrivateRoom", body: "*" };
+  }
+  rpc ListInvitedPrivateRoom (.google.protobuf.Empty) returns (.rpc.api.MultiGameListInvitedPrivateRoomResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/ListInvitedPrivateRoom", body: "*" };
+  }
+  rpc CheckMatchStatus (.rpc.api.MultiGameCheckMatchStatusRequest) returns (.rpc.api.MultiGameCheckMatchStatusResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_MULTI_GAME_MATCHING_TIMEOUT, error_codes: ERROR_CODE_MULTI_GAME_SERVER_ALLOCATION_FAILED, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_FULFILL, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_NOT_FOUND, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_USER_BLOCKED, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_APP_VERSION_MISMATCH, error_codes: ERROR_CODE_MULTI_GAME_PRIVATE_ROOM_MASTER_VERSION_MISMATCH };
+    option (google.api.http) = { post: "/MultiGame/CheckMatchStatus", body: "*" };
+  }
+  rpc CancelMatch (.rpc.api.MultiGameCancelMatchRequest) returns (.rpc.api.MultiGameCancelMatchResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/CancelMatch", body: "*" };
+  }
+  rpc SetPrivateRoomRematchStatus (.rpc.api.MultiGameSetPrivateRoomRematchStatusRequest) returns (.rpc.api.MultiGameSetPrivateRoomRematchStatusResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_MULTI_GAME_REMATCH_EXPIRED };
+    option (google.api.http) = { post: "/MultiGame/SetPrivateRoomRematchStatus", body: "*" };
+  }
+  rpc CheckPrivateRoomRematchStatus (.rpc.api.MultiGameCheckPrivateRoomRematchStatusRequest) returns (.rpc.api.MultiGameCheckPrivateRoomRematchStatusResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/CheckPrivateRoomRematchStatus", body: "*" };
+  }
+  rpc ListBasicUserInfo (.rpc.api.MultiGameListBasicUserInfoRequest) returns (.rpc.api.MultiGameListBasicUserInfoResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/ListBasicUserInfo", body: "*" };
+  }
+  rpc SaveReactionSendInfo (.rpc.api.MultiGameSaveReactionSendInfoRequest) returns (.rpc.api.MultiGameSaveReactionSendInfoResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/MultiGame/SaveReactionSendInfo", body: "*" };
+  }
+}

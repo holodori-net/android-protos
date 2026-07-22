@@ -1,0 +1,32 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/user_data.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message UserGetResponse {
+  .rpc.api.common.UserData user_data = 1 [(options.zap.hidden) = true];
+}
+
+message UserDeleteResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service User {
+  rpc Get (.google.protobuf.Empty) returns (.rpc.api.UserGetResponse) {
+    option (google.api.http) = { post: "/User/Get", body: "*" };
+  }
+  rpc Delete (.google.protobuf.Empty) returns (.rpc.api.UserDeleteResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/User/Delete", body: "*" };
+  }
+}

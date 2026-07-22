@@ -1,0 +1,16 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package entity.master;
+
+import "entity/master/options/master.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/master";
+option csharp_namespace = "Vision.Common.Proto.Master";
+
+message MusicHighestScoreRatingRankingReward {
+  option (options.master.table) = true;
+  string character_id = 1 [(options.master.pk) = true, (options.master.fk) = "Character:id"];
+  int32 end_ranking_rank = 2 [(options.master.pk) = true];
+  string emblem_id = 3 [(options.master.fk) = "Emblem:id"];
+}

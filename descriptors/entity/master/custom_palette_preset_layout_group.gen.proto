@@ -1,0 +1,26 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package entity.master;
+
+import "entity/master/options/master.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/master";
+option csharp_namespace = "Vision.Common.Proto.Master";
+
+message CustomPalettePresetLayoutGroup {
+  option (options.master.table) = true;
+  string id = 1 [(options.master.pk) = true];
+  string name_lang_id = 2 [(options.master.fk) = "LangCustomPalettePresetLayoutGroup:id"];
+  int32 order = 999;
+  repeated .entity.master.CustomPalettePresetLayoutGroup.CustomPalettePresetLayout custom_palette_preset_layouts = 1000 [(options.master.optional) = true];
+  message CustomPalettePresetLayout {
+    string custom_palette_preset_layout_group_id = 1 [(options.master.optional) = true];
+    int32 number = 2 [(options.master.optional) = true];
+    int32 position_x_permil = 3 [(options.master.optional) = true];
+    int32 position_y_permil = 4 [(options.master.optional) = true];
+    int32 scale_permil = 5 [(options.master.optional) = true];
+    int32 rotation_permil = 6 [(options.master.optional) = true];
+    int32 layer = 7 [(options.master.optional) = true];
+  }
+}

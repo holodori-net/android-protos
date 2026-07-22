@@ -1,0 +1,128 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "enums/payment_method.gen.proto";
+import "enums/shop_charge_item_type.gen.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+import "rpc/api/common/shop.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message PaymentCheckPurchaseRequest {
+  string product_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  .enums.PaymentMethod payment_method = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+}
+
+message PaymentCheckPurchaseResponse {
+  bool is_underage = 1;
+  bool is_exceed_alert_monthly_paid_quantity = 2;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message PaymentCreateOrderRequest {
+  string product_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  .enums.PaymentMethod payment_method = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+}
+
+message PaymentCancelOrderRequest {
+  string product_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  .enums.PaymentMethod payment_method = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+}
+
+message PaymentRegisterDeferredPurchaseRequest {
+  string product_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  .enums.PaymentMethod payment_method = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  string payment_transaction_id = 3 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message PaymentFulfillOrderRequest {
+  .rpc.api.PaymentFulfillOrderRequest.ProductDefinition product_definition = 1;
+  .rpc.api.PaymentFulfillOrderRequest.PurchaseReceipt purchase_receipt = 2;
+  .rpc.api.PaymentFulfillOrderRequest.ProductMetadata product_metadata = 3;
+  message ProductDefinition {
+    string id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+    .enums.ShopChargeItemType type = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  }
+  message PurchaseReceipt {
+    string store_name = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+    .enums.PaymentMethod payment_method = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+    string payment_transaction_id = 3 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+    .rpc.api.PaymentFulfillOrderRequest.PurchaseReceipt.Payload payload = 4;
+    message Payload {
+      .rpc.api.PaymentFulfillOrderRequest.PurchaseReceipt.Payload.AppleIap apple_iap = 1;
+      .rpc.api.PaymentFulfillOrderRequest.PurchaseReceipt.Payload.GoogleIap google_iap = 2;
+      .rpc.api.PaymentFulfillOrderRequest.PurchaseReceipt.Payload.SteamMtx steam_mtx = 3;
+      message AppleIap {
+        string jws_representation = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+      }
+      message GoogleIap {
+        string json_receipt = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+        string base64_encoded_signature = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+      }
+      message SteamMtx {
+        uint32 app_id = 1;
+        uint64 order_id = 2;
+        uint32 authorized = 3;
+      }
+    }
+  }
+  message ProductMetadata {
+    string iso_currency_code = 1 [(buf.validate.field) = { string: { pattern: "^[A-Z]{3}$" } }];
+    string localized_description = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+    int64 localized_price_permyriad = 3 [(buf.validate.field) = { int64: { gte: 0 } }];
+    string localized_price = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+    string localized_title = 5 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  }
+}
+
+message PaymentFulfillOrderResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Shop shop = 2;
+  bool is_used_receipt = 100;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message PaymentCreateOrderResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message PaymentCancelOrderResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message PaymentRegisterDeferredPurchaseResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Payment {
+  rpc CheckPurchase (.rpc.api.PaymentCheckPurchaseRequest) returns (.rpc.api.PaymentCheckPurchaseResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_IN_FEATURE_MAINTENANCE, error_codes: ERROR_CODE_SHOP_OUT_OF_TERM, error_codes: ERROR_CODE_PAYMENT_NOT_REGISTERED_BIRTHDAY, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_PAID_STONE_QUANTITY, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_PURCHASE_COUNT, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_MONTHLY_PAID_QUANTITY };
+    option (google.api.http) = { post: "/Payment/CheckPurchase", body: "*" };
+  }
+  rpc CreateOrder (.rpc.api.PaymentCreateOrderRequest) returns (.rpc.api.PaymentCreateOrderResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_IN_FEATURE_MAINTENANCE, error_codes: ERROR_CODE_SHOP_OUT_OF_TERM, error_codes: ERROR_CODE_PAYMENT_NOT_REGISTERED_BIRTHDAY, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_PAID_STONE_QUANTITY, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_PURCHASE_COUNT, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_MONTHLY_PAID_QUANTITY };
+    option (google.api.http) = { post: "/Payment/CreateOrder", body: "*" };
+  }
+  rpc CancelOrder (.rpc.api.PaymentCancelOrderRequest) returns (.rpc.api.PaymentCancelOrderResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Payment/CancelOrder", body: "*" };
+  }
+  rpc RegisterDeferredPurchase (.rpc.api.PaymentRegisterDeferredPurchaseRequest) returns (.rpc.api.PaymentRegisterDeferredPurchaseResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Payment/RegisterDeferredPurchase", body: "*" };
+  }
+  rpc FulfillOrder (.rpc.api.PaymentFulfillOrderRequest) returns (.rpc.api.PaymentFulfillOrderResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_PAYMENT_NOT_REGISTERED_BIRTHDAY, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_PAID_STONE_QUANTITY, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_PURCHASE_COUNT, error_codes: ERROR_CODE_PAYMENT_EXCEED_MAX_MONTHLY_PAID_QUANTITY, error_codes: ERROR_CODE_PAYMENT_FULFILL_ORDER_BLOCKED_DONT_RECOVERY_FOREVER, error_codes: ERROR_CODE_PAYMENT_FULFILL_ORDER_BLOCKED_CHALLENGE_RECOVERY_NEXT_TIME };
+    option (google.api.http) = { post: "/Payment/FulfillOrder", body: "*" };
+  }
+}

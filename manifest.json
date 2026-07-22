@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "app": {
+    "versionName": "1.0.0",
+    "versionCode": 1783590150
+  },
+  "keys": {
+    "apiSecret": "BJYZ0w3DJm",
+    "octoApiKey": "B46OtKlGGHoz6sxbOWDe3VUvBsagXxr5av38IQIKUKo=",
+    "octoClientKey": "CwFhQ+S5m4nERWVaq5oFZIP0cZLc0j7O/zllG0UYVNo="
+  }
+}

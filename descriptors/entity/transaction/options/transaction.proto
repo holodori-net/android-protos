@@ -1,0 +1,14 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package options.transaction;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/transaction/options";
+option csharp_namespace = "Vision.Common.Proto.Transaction.Options";
+
+extend .google.protobuf.FieldOptions {
+  bool pk = 51030;
+  string fk = 51031;
+}

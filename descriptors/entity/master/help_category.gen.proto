@@ -1,0 +1,20 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package entity.master;
+
+import "entity/master/options/master.proto";
+import "enums/help_category_screen_type.gen.proto";
+import "enums/help_category_type.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/master";
+option csharp_namespace = "Vision.Common.Proto.Master";
+
+message HelpCategory {
+  option (options.master.table) = true;
+  string id = 1 [(options.master.pk) = true];
+  .enums.HelpCategoryType type = 2;
+  string title_lang_id = 3 [(options.master.fk) = "LangHelpCategory:id"];
+  .enums.HelpCategoryScreenType screen_type = 4;
+  int32 order = 999;
+}

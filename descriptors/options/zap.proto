@@ -1,0 +1,12 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package options.zap;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/options/zap";
+
+extend .google.protobuf.FieldOptions {
+  bool hidden = 50050;
+}

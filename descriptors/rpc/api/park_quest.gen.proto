@@ -1,0 +1,658 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "common/live.gen.proto";
+import "common/reward.gen.proto";
+import "enums/live_evaluation_rank_type.gen.proto";
+import "enums/live_result_type.gen.proto";
+import "enums/music_difficulty_type.gen.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/chase.gen.proto";
+import "rpc/api/common/circuit.gen.proto";
+import "rpc/api/common/combo_card_game.gen.proto";
+import "rpc/api/common/cooking_puzzle.gen.proto";
+import "rpc/api/common/jump_rope.gen.proto";
+import "rpc/api/common/live.gen.proto";
+import "rpc/api/common/multi_game.gen.proto";
+import "rpc/api/common/park.gen.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+import "rpc/api/common/splash_ball.gen.proto";
+import "rpc/api/common/startup_notification.gen.proto";
+import "rpc/api/common/storage_url.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message ParkQuestStartCharacterRequest {
+  string park_permanence_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ParkQuestClearStepRequest {
+  .rpc.api.common.ParkQuestCommonRequestParam park_quest_common_request_param = 1;
+}
+
+message ParkQuestClearStepResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  repeated .rpc.api.common.StartupNotification startup_notifications = 2 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestGetLiveFixedDeckRequest {
+  .rpc.api.common.ParkQuestCommonRequestParam park_quest_common_request_param = 1;
+  .enums.MusicDifficultyType difficulty_type = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+}
+
+message ParkQuestGetLiveFixedDeckResponse {
+  repeated .rpc.api.common.LiveDeckPosition deck_positions = 1;
+  .rpc.api.common.LiveDeckEvaluation live_deck_evaluation = 2;
+  .rpc.api.common.LiveDeckInGameEffect live_deck_in_game_effect = 3;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestGetLiveFixedCharacterDeckRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .enums.MusicDifficultyType difficulty_type = 6 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  string costume_id = 7 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated .rpc.api.ParkQuestGetLiveFixedCharacterDeckRequest.LiveDeckPosition deck_positions = 8 [(buf.validate.field) = { repeated: { max_items: 5 } }];
+  message LiveDeckPosition {
+    int32 position = 1 [(buf.validate.field) = { int32: { lte: 5, gte: 1 } }];
+    string card_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  }
+}
+
+message ParkQuestGetLiveFixedCharacterDeckResponse {
+  repeated .rpc.api.common.LiveDeckPosition deck_positions = 1;
+  .rpc.api.common.LiveDeckEvaluation live_deck_evaluation = 2;
+  .rpc.api.common.LiveDeckInGameEffect live_deck_in_game_effect = 3;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartLiveRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .enums.MusicDifficultyType difficulty_type = 6 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  string character_id = 7 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  string costume_id = 8 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated string card_ids = 9 [(buf.validate.field) = { repeated: { min_items: 5, max_items: 5 } }];
+  bool is_auto_play = 10;
+  .rpc.api.common.LiveSkinInfo skin_info = 11;
+  string music_mv_category_id = 12;
+}
+
+message ParkQuestStartLiveResponse {
+  int32 seed = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestFinishLiveRequest {
+  .common.LiveBaseResult result = 1;
+}
+
+message ParkQuestFinishLiveResponse {
+  .enums.LiveResultType result_type = 1;
+  .enums.LiveEvaluationRankType evaluation_rank_type = 2;
+  int32 evaluation_rank_plus = 3;
+  repeated .common.Reward quest_step_clear_rewards = 4;
+  repeated .common.Reward music_clear_count_rewards = 5;
+  repeated .common.Reward music_full_combo_rewards = 6;
+  repeated .common.Reward music_highest_score_rank_rewards = 7;
+  repeated .common.Reward music_max_combo_count_phase_rewards = 8;
+  int64 past_character_highest_score = 9;
+  .rpc.api.common.LiveResultMusicHighestScoreRatingInfo result_music_highest_score_rating_info = 10;
+  bool is_cleared_quest = 12;
+  .rpc.api.common.LiveResultMusicHighestScoreRankingInfo result_music_highest_score_ranking_info = 13;
+  int64 technical_score = 14;
+  repeated .rpc.api.common.StartupNotification startup_notifications = 15 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartTutorialLiveRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .enums.MusicDifficultyType difficulty_type = 6 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  string character_id = 7 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  string costume_id = 8 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated string card_ids = 9 [(buf.validate.field) = { repeated: { min_items: 5, max_items: 5 } }];
+  string music_mv_category_id = 10;
+}
+
+message ParkQuestFinishTutorialLiveRequest {
+  .common.LiveBaseResult result = 1;
+}
+
+message ParkQuestFinishTutorialLiveResponse {
+  .enums.LiveResultType result_type = 1;
+  .enums.LiveEvaluationRankType evaluation_rank_type = 2;
+  int32 evaluation_rank_plus = 3;
+  repeated .rpc.api.common.RewardResult reward_results = 4;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestRetryLiveRequest {
+  .common.LiveBaseResult result = 1;
+  int64 progress_millisecond = 2 [(buf.validate.field) = { int64: { gte: 0 } }];
+}
+
+message ParkQuestRetryLiveResponse {
+  int32 seed = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartTutorialLiveResponse {
+  int32 seed = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestRetireLiveRequest {
+  .common.LiveBaseResult result = 1;
+  int64 progress_millisecond = 2 [(buf.validate.field) = { int64: { gte: 0 } }];
+}
+
+message ParkQuestMatchRandomJumpRopeRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .rpc.api.common.MultiGameMatchRandomInfo match_random_info = 1000;
+}
+
+message ParkQuestMatchRandomJumpRopeResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartJumpRopeSingleRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ParkQuestStartJumpRopeSingleResponse {
+  int32 seed = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartJumpRopeMultiRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+  repeated .rpc.api.common.MultiGameParkEmotionSendInfo park_emotion_send_infos = 101 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+}
+
+message ParkQuestFinishJumpRopeSingleRequest {
+  int32 jump_count = 1 [(buf.validate.field) = { int32: { gte: 0 } }];
+  int32 success_jump_count = 2 [(buf.validate.field) = { int32: { gte: 0 } }];
+  int32 failure_jump_count = 3 [(buf.validate.field) = { int32: { gte: 0 } }];
+  int32 continuous_jump_count = 4 [(buf.validate.field) = { int32: { gte: 0 } }];
+}
+
+message ParkQuestFinishJumpRopeSingleResponse {
+  bool is_cleared = 1;
+  repeated .rpc.api.common.RewardResult reward_results = 2;
+  repeated .rpc.api.common.StartupNotification startup_notifications = 3 [(options.zap.hidden) = true];
+  .rpc.api.common.StorageUrlInfo play_log_upload_url = 50 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestFinishJumpRopeMultiRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestFinishJumpRopeMultiResponse {
+  bool is_cleared = 1;
+  .rpc.api.common.JumpRopeResultInfo jump_rope_result_info = 2;
+  int32 self_past_best_jump_count = 3;
+  bool is_self_best_jump_count_updated = 4;
+  repeated .rpc.api.common.RewardResult reward_results = 5;
+  repeated .rpc.api.common.StartupNotification startup_notifications = 6 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestMatchRandomCircuitRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .rpc.api.common.MultiGameMatchRandomInfo match_random_info = 1000;
+}
+
+message ParkQuestMatchRandomCircuitResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartCircuitRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+  repeated .rpc.api.common.MultiGameParkEmotionSendInfo park_emotion_send_infos = 101 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+}
+
+message ParkQuestFinishCircuitRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestFinishCircuitResponse {
+  bool is_cleared = 1;
+  .rpc.api.common.CircuitResultInfo circuit_result_info = 2;
+  repeated .rpc.api.common.RewardResult reward_results = 3;
+  repeated .rpc.api.common.StartupNotification startup_notifications = 4 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartCookingPuzzleRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ParkQuestFinishCookingPuzzleRequest {
+  repeated .rpc.api.common.CookingPuzzleRecipeInfo completion_recipe_infos = 1 [(buf.validate.field) = { repeated: { max_items: 100 } }];
+  .rpc.api.common.CookingPuzzleRecipeInfo last_uncompletion_recipe_info = 2;
+  int64 score = 3 [(buf.validate.field) = { int64: { gte: 0 } }];
+  int32 stock_space_overflow_count = 4 [(buf.validate.field) = { int32: { gte: 0 } }];
+  int32 foodstuff_collecting_count = 5 [(buf.validate.field) = { int32: { gte: 0 } }];
+  int32 max_combo_count = 6 [(buf.validate.field) = { int32: { gte: 0 } }];
+}
+
+message ParkQuestFinishCookingPuzzleResponse {
+  bool is_cleared = 1;
+  repeated .rpc.api.common.RewardResult reward_results = 2;
+  repeated .rpc.api.common.StartupNotification startup_notifications = 3 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestRetireCookingPuzzleRequest {
+  repeated .rpc.api.common.CookingPuzzleRecipeInfo completion_recipe_infos = 1 [(buf.validate.field) = { repeated: { max_items: 100 } }];
+  .rpc.api.common.CookingPuzzleRecipeInfo last_uncompletion_recipe_info = 2;
+  int64 score = 3 [(buf.validate.field) = { int64: { gte: 0 } }];
+  int32 stock_space_overflow_count = 4 [(buf.validate.field) = { int32: { gte: 0 } }];
+  int32 foodstuff_collecting_count = 5 [(buf.validate.field) = { int32: { gte: 0 } }];
+  int32 max_combo_count = 6 [(buf.validate.field) = { int32: { gte: 0 } }];
+}
+
+message ParkQuestReportCookingPuzzleRecipeProgressRequest {
+  string cooking_puzzle_recipe_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestMatchRandomComboCardGameRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .rpc.api.common.MultiGameMatchRandomInfo match_random_info = 1000;
+}
+
+message ParkQuestMatchRandomComboCardGameResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartComboCardGameRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+  repeated .rpc.api.common.MultiGameParkEmotionSendInfo park_emotion_send_infos = 101 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+}
+
+message ParkQuestFinishComboCardGameRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+}
+
+message ParkQuestFinishComboCardGameResponse {
+  bool is_cleared = 1;
+  .rpc.api.common.ComboCardGameResultInfo combo_card_game_result_info = 2;
+  repeated .rpc.api.common.RewardResult reward_results = 3;
+  int64 before_chip_diff_total_quantity = 4;
+  repeated .rpc.api.common.StartupNotification startup_notifications = 5 [(options.zap.hidden) = true];
+  bool is_highest_score_updated = 6;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestMatchRandomChaseRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .rpc.api.common.MultiGameMatchRandomInfo match_random_info = 1000;
+}
+
+message ParkQuestMatchRandomChaseResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartChaseRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100;
+  repeated .rpc.api.common.MultiGameParkEmotionSendInfo park_emotion_send_infos = 101;
+}
+
+message ParkQuestFinishChaseRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestFinishChaseResponse {
+  bool is_cleared = 1;
+  .rpc.api.common.ChaseResultInfo chase_result_info = 2;
+  int64 past_highest_score = 3;
+  bool is_highest_score_updated = 4;
+  repeated .rpc.api.common.RewardResult reward_results = 5;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestMatchRandomSplashBallRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  .rpc.api.common.MultiGameMatchRandomInfo match_random_info = 1000;
+}
+
+message ParkQuestMatchRandomSplashBallResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartSplashBallRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100;
+  repeated .rpc.api.common.MultiGameParkEmotionSendInfo park_emotion_send_infos = 101;
+}
+
+message ParkQuestFinishSplashBallRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestFinishSplashBallResponse {
+  bool is_cleared = 1;
+  .rpc.api.common.SplashBallResultInfo splash_ball_result_info = 2;
+  int64 past_highest_score = 3;
+  bool is_highest_score_updated = 4;
+  repeated .rpc.api.common.RewardResult reward_results = 5;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestDeliverItemRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ParkQuestDeliverItemResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestLevelUpFacilityRequest {
+  string park_quest_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 step_group_number = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+  int32 step = 3 [(buf.validate.field) = { int32: { gte: 1 } }];
+  string park_target_mapping_id = 4 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 action_number = 5 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message ParkQuestLevelUpFacilityResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestUseCharacterQuestItemRequest {
+  string character_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestSelectAreaRequest {
+  repeated .rpc.api.common.ParkQuestCommonRequestParam park_quest_common_request_param = 1 [(buf.validate.field) = { repeated: { max_items: 20 } }];
+  string area_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestSelectAreaResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestMoveAreaRequest {
+  repeated .rpc.api.common.ParkQuestCommonRequestParam park_quest_common_request_param = 1 [(buf.validate.field) = { repeated: { max_items: 20 } }];
+  string area_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkQuestStartCharacterResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestRetireLiveResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartJumpRopeMultiResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartCircuitResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartCookingPuzzleResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestRetireCookingPuzzleResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestReportCookingPuzzleRecipeProgressResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartComboCardGameResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartChaseResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestStartSplashBallResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestUseCharacterQuestItemResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkQuestMoveAreaResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service ParkQuest {
+  rpc StartCharacter (.rpc.api.ParkQuestStartCharacterRequest) returns (.rpc.api.ParkQuestStartCharacterResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartCharacter", body: "*" };
+  }
+  rpc ClearStep (.rpc.api.ParkQuestClearStepRequest) returns (.rpc.api.ParkQuestClearStepResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/ClearStep", body: "*" };
+  }
+  rpc GetLiveFixedDeck (.rpc.api.ParkQuestGetLiveFixedDeckRequest) returns (.rpc.api.ParkQuestGetLiveFixedDeckResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/GetLiveFixedDeck", body: "*" };
+  }
+  rpc GetLiveFixedCharacterDeck (.rpc.api.ParkQuestGetLiveFixedCharacterDeckRequest) returns (.rpc.api.ParkQuestGetLiveFixedCharacterDeckResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/GetLiveFixedCharacterDeck", body: "*" };
+  }
+  rpc StartLive (.rpc.api.ParkQuestStartLiveRequest) returns (.rpc.api.ParkQuestStartLiveResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartLive", body: "*" };
+  }
+  rpc FinishLive (.rpc.api.ParkQuestFinishLiveRequest) returns (.rpc.api.ParkQuestFinishLiveResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishLive", body: "*" };
+  }
+  rpc RetryLive (.rpc.api.ParkQuestRetryLiveRequest) returns (.rpc.api.ParkQuestRetryLiveResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkQuest/RetryLive", body: "*" };
+  }
+  rpc RetireLive (.rpc.api.ParkQuestRetireLiveRequest) returns (.rpc.api.ParkQuestRetireLiveResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkQuest/RetireLive", body: "*" };
+  }
+  rpc StartTutorialLive (.rpc.api.ParkQuestStartTutorialLiveRequest) returns (.rpc.api.ParkQuestStartTutorialLiveResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartTutorialLive", body: "*" };
+  }
+  rpc FinishTutorialLive (.rpc.api.ParkQuestFinishTutorialLiveRequest) returns (.rpc.api.ParkQuestFinishTutorialLiveResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishTutorialLive", body: "*" };
+  }
+  rpc MatchRandomJumpRope (.rpc.api.ParkQuestMatchRandomJumpRopeRequest) returns (.rpc.api.ParkQuestMatchRandomJumpRopeResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/MatchRandomJumpRope", body: "*" };
+  }
+  rpc StartJumpRopeSingle (.rpc.api.ParkQuestStartJumpRopeSingleRequest) returns (.rpc.api.ParkQuestStartJumpRopeSingleResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartJumpRopeSingle", body: "*" };
+  }
+  rpc StartJumpRopeMulti (.rpc.api.ParkQuestStartJumpRopeMultiRequest) returns (.rpc.api.ParkQuestStartJumpRopeMultiResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartJumpRopeMulti", body: "*" };
+  }
+  rpc FinishJumpRopeSingle (.rpc.api.ParkQuestFinishJumpRopeSingleRequest) returns (.rpc.api.ParkQuestFinishJumpRopeSingleResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishJumpRopeSingle", body: "*" };
+  }
+  rpc FinishJumpRopeMulti (.rpc.api.ParkQuestFinishJumpRopeMultiRequest) returns (.rpc.api.ParkQuestFinishJumpRopeMultiResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishJumpRopeMulti", body: "*" };
+  }
+  rpc MatchRandomCircuit (.rpc.api.ParkQuestMatchRandomCircuitRequest) returns (.rpc.api.ParkQuestMatchRandomCircuitResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/MatchRandomCircuit", body: "*" };
+  }
+  rpc StartCircuit (.rpc.api.ParkQuestStartCircuitRequest) returns (.rpc.api.ParkQuestStartCircuitResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartCircuit", body: "*" };
+  }
+  rpc FinishCircuit (.rpc.api.ParkQuestFinishCircuitRequest) returns (.rpc.api.ParkQuestFinishCircuitResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishCircuit", body: "*" };
+  }
+  rpc StartCookingPuzzle (.rpc.api.ParkQuestStartCookingPuzzleRequest) returns (.rpc.api.ParkQuestStartCookingPuzzleResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartCookingPuzzle", body: "*" };
+  }
+  rpc FinishCookingPuzzle (.rpc.api.ParkQuestFinishCookingPuzzleRequest) returns (.rpc.api.ParkQuestFinishCookingPuzzleResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishCookingPuzzle", body: "*" };
+  }
+  rpc RetireCookingPuzzle (.rpc.api.ParkQuestRetireCookingPuzzleRequest) returns (.rpc.api.ParkQuestRetireCookingPuzzleResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/RetireCookingPuzzle", body: "*" };
+  }
+  rpc ReportCookingPuzzleRecipeProgress (.rpc.api.ParkQuestReportCookingPuzzleRecipeProgressRequest) returns (.rpc.api.ParkQuestReportCookingPuzzleRecipeProgressResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkQuest/ReportCookingPuzzleRecipeProgress", body: "*" };
+  }
+  rpc MatchRandomComboCardGame (.rpc.api.ParkQuestMatchRandomComboCardGameRequest) returns (.rpc.api.ParkQuestMatchRandomComboCardGameResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/MatchRandomComboCardGame", body: "*" };
+  }
+  rpc StartComboCardGame (.rpc.api.ParkQuestStartComboCardGameRequest) returns (.rpc.api.ParkQuestStartComboCardGameResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartComboCardGame", body: "*" };
+  }
+  rpc FinishComboCardGame (.rpc.api.ParkQuestFinishComboCardGameRequest) returns (.rpc.api.ParkQuestFinishComboCardGameResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishComboCardGame", body: "*" };
+  }
+  rpc MatchRandomChase (.rpc.api.ParkQuestMatchRandomChaseRequest) returns (.rpc.api.ParkQuestMatchRandomChaseResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/MatchRandomChase", body: "*" };
+  }
+  rpc StartChase (.rpc.api.ParkQuestStartChaseRequest) returns (.rpc.api.ParkQuestStartChaseResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartChase", body: "*" };
+  }
+  rpc FinishChase (.rpc.api.ParkQuestFinishChaseRequest) returns (.rpc.api.ParkQuestFinishChaseResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishChase", body: "*" };
+  }
+  rpc MatchRandomSplashBall (.rpc.api.ParkQuestMatchRandomSplashBallRequest) returns (.rpc.api.ParkQuestMatchRandomSplashBallResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/MatchRandomSplashBall", body: "*" };
+  }
+  rpc StartSplashBall (.rpc.api.ParkQuestStartSplashBallRequest) returns (.rpc.api.ParkQuestStartSplashBallResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/StartSplashBall", body: "*" };
+  }
+  rpc FinishSplashBall (.rpc.api.ParkQuestFinishSplashBallRequest) returns (.rpc.api.ParkQuestFinishSplashBallResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/FinishSplashBall", body: "*" };
+  }
+  rpc DeliverItem (.rpc.api.ParkQuestDeliverItemRequest) returns (.rpc.api.ParkQuestDeliverItemResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/DeliverItem", body: "*" };
+  }
+  rpc LevelUpFacility (.rpc.api.ParkQuestLevelUpFacilityRequest) returns (.rpc.api.ParkQuestLevelUpFacilityResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/LevelUpFacility", body: "*" };
+  }
+  rpc UseCharacterQuestItem (.rpc.api.ParkQuestUseCharacterQuestItemRequest) returns (.rpc.api.ParkQuestUseCharacterQuestItemResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/UseCharacterQuestItem", body: "*" };
+  }
+  rpc SelectArea (.rpc.api.ParkQuestSelectAreaRequest) returns (.rpc.api.ParkQuestSelectAreaResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/SelectArea", body: "*" };
+  }
+  rpc MoveArea (.rpc.api.ParkQuestMoveAreaRequest) returns (.rpc.api.ParkQuestMoveAreaResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkQuest/MoveArea", body: "*" };
+  }
+}

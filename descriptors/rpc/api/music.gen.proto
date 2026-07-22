@@ -1,0 +1,125 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "entity/master/options/master.proto";
+import "enums/music_difficulty_type.gen.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/ranking.gen.proto";
+import "rpc/api/common/response.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message MusicSwitchFavoriteRequest {
+  string music_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  bool is_favorite = 2;
+}
+
+message MusicGetHighestScoreLiveDeckRequest {
+  string public_user_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  string music_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MusicGetHighestScoreLiveDeckResponse {
+  .rpc.api.common.RankingLiveDeckInfo ranking_live_deck_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MusicGetHighestScoreRankingInfoRequest {
+  string music_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MusicGetHighestScoreRankingInfoResponse {
+  int32 self_rank = 1;
+  repeated .rpc.api.common.BasicRankingRankInfo rank_infos = 2 [(options.zap.hidden) = true];
+  repeated .rpc.api.MusicGetHighestScoreRankingInfoResponse.MusicDifficultyScoreInfo self_music_difficulty_score_infos = 3;
+  .rpc.api.common.Response common_response = 9999;
+  message MusicDifficultyScoreInfo {
+    .enums.MusicDifficultyType music_difficulty_type = 1;
+    int64 score = 2;
+  }
+}
+
+message MusicListHighestScoreRatingRankingRankRequest {
+  repeated string character_ids = 1 [(buf.validate.field) = { repeated: { min_items: 1, unique: true, items: { string: { min_bytes: 1 } } } }];
+}
+
+message MusicListHighestScoreRatingRankingRankResponse {
+  repeated .rpc.api.MusicListHighestScoreRatingRankingRankResponse.RankInfo rank_infos = 1 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+  message RankInfo {
+    string character_id = 2 [(options.master.fk) = "Character:id"];
+    int32 rank = 1;
+  }
+}
+
+message MusicGetHighestScoreRatingRankingInfoRequest {
+  string character_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MusicGetHighestScoreRatingRankingInfoResponse {
+  repeated .rpc.api.common.BasicRankingRankInfo rank_infos = 1 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MusicReleaseMusicRequest {
+  string music_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MusicListHighestScoreRatingRankingRewardThresholdRankingRankInfoRequest {
+  string character_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message MusicListHighestScoreRatingRankingRewardThresholdRankingRankInfoResponse {
+  repeated .rpc.api.MusicListHighestScoreRatingRankingRewardThresholdRankingRankInfoResponse.ThresholdRankingRankInfo threshold_rank_infos = 1;
+  int64 updated_ranking_time = 2;
+  .rpc.api.common.Response common_response = 9999;
+  message ThresholdRankingRankInfo {
+    int32 rank = 1;
+    int64 score = 2;
+  }
+}
+
+message MusicSwitchFavoriteResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MusicReleaseMusicResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Music {
+  rpc SwitchFavorite (.rpc.api.MusicSwitchFavoriteRequest) returns (.rpc.api.MusicSwitchFavoriteResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Music/SwitchFavorite", body: "*" };
+  }
+  rpc GetHighestScoreLiveDeck (.rpc.api.MusicGetHighestScoreLiveDeckRequest) returns (.rpc.api.MusicGetHighestScoreLiveDeckResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Music/GetHighestScoreLiveDeck", body: "*" };
+  }
+  rpc GetHighestScoreRankingInfo (.rpc.api.MusicGetHighestScoreRankingInfoRequest) returns (.rpc.api.MusicGetHighestScoreRankingInfoResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Music/GetHighestScoreRankingInfo", body: "*" };
+  }
+  rpc ListHighestScoreRatingRankingRank (.rpc.api.MusicListHighestScoreRatingRankingRankRequest) returns (.rpc.api.MusicListHighestScoreRatingRankingRankResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Music/ListHighestScoreRatingRankingRank", body: "*" };
+  }
+  rpc GetHighestScoreRatingRankingInfo (.rpc.api.MusicGetHighestScoreRatingRankingInfoRequest) returns (.rpc.api.MusicGetHighestScoreRatingRankingInfoResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Music/GetHighestScoreRatingRankingInfo", body: "*" };
+  }
+  rpc ReleaseMusic (.rpc.api.MusicReleaseMusicRequest) returns (.rpc.api.MusicReleaseMusicResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Music/ReleaseMusic", body: "*" };
+  }
+  rpc ListHighestScoreRatingRankingRewardThresholdRankingRankInfo (.rpc.api.MusicListHighestScoreRatingRankingRewardThresholdRankingRankInfoRequest) returns (.rpc.api.MusicListHighestScoreRatingRankingRewardThresholdRankingRankInfoResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Music/ListHighestScoreRatingRankingRewardThresholdRankingRankInfo", body: "*" };
+  }
+}

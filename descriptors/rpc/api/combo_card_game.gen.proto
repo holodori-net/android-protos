@@ -1,0 +1,119 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "options/zap.proto";
+import "rpc/api/common/combo_card_game.gen.proto";
+import "rpc/api/common/marathon.gen.proto";
+import "rpc/api/common/multi_game.gen.proto";
+import "rpc/api/common/profile.gen.proto";
+import "rpc/api/common/ranking.gen.proto";
+import "rpc/api/common/response.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message ComboCardGameMatchRandomRequest {
+  int64 bet_coin_quantity = 1 [(buf.validate.field) = { int64: { gt: 0 } }];
+  .rpc.api.common.MultiGameMatchRandomInfo match_random_info = 1000;
+}
+
+message ComboCardGameMatchRandomResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ComboCardGameCreatePrivateRoomRequest {
+  .rpc.api.common.MultiGameCreatePrivateRoomInfo create_private_room_info = 1000;
+}
+
+message ComboCardGameCreatePrivateRoomResponse {
+  .rpc.api.common.MultiGameMatchInfo match_info = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ComboCardGameStartRequest {
+  int32 bet_coin_quantity = 1 [(buf.validate.field) = { int32: { gte: 0 } }];
+  string character_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  bool is_private_room = 3;
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+  repeated .rpc.api.common.MultiGameParkEmotionSendInfo park_emotion_send_infos = 101 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+}
+
+message ComboCardGameFinishRequest {
+  string multi_game_result_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated .rpc.api.common.MultiGameStampSendInfo stamp_send_infos = 100 [(buf.validate.field) = { repeated: { max_items: 200 } }];
+}
+
+message ComboCardGameFinishResponse {
+  .rpc.api.common.ComboCardGameResultInfo combo_card_game_result_info = 1;
+  .rpc.api.common.MultiGameResultPrivateRoomInfo private_room_info = 2;
+  int64 rank_reward_coefficient_permil_multiply = 3;
+  int64 bet_coin_reward_up_effect_permil_multiply = 4;
+  int64 bet_coin_reward_quantity = 5;
+  int32 bet_coin_reward_quantity_up_permil_up_by_benefit_license = 6;
+  int32 bet_coin_reward_quantity_up_permil_up_by_skill_tree = 7;
+  int64 bet_coin_consumption_quantity = 8;
+  int64 before_chip_diff_total_quantity = 9;
+  bool is_highest_score_updated = 10;
+  .rpc.api.common.MarathonMiniGameResult marathon_mini_game_result = 100;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ComboCardGameGetRankingInfoResponse {
+  int32 self_rank = 1;
+  repeated .rpc.api.common.BasicRankingRankInfo rank_infos = 2 [(options.zap.hidden) = true];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ComboCardGameListUserInfoRequest {
+  repeated string public_user_ids = 1 [(buf.validate.field) = { repeated: { min_items: 1, items: { string: { min_bytes: 1 } } } }];
+  string private_room_id = 2;
+}
+
+message ComboCardGameListUserInfoResponse {
+  repeated .rpc.api.ComboCardGameListUserInfoResponse.ComboCardGameUserInfo combo_card_game_user_infos = 1;
+  .rpc.api.common.Response common_response = 9999;
+  message ComboCardGameUserInfo {
+    .rpc.api.common.BasicUserInfo basic_user_info = 1;
+    int32 combo_card_game_average_rank_percent = 2;
+    int64 combo_card_game_chip_diff_total_quantity = 3;
+  }
+}
+
+message ComboCardGameStartResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service ComboCardGame {
+  rpc MatchRandom (.rpc.api.ComboCardGameMatchRandomRequest) returns (.rpc.api.ComboCardGameMatchRandomResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ComboCardGame/MatchRandom", body: "*" };
+  }
+  rpc CreatePrivateRoom (.rpc.api.ComboCardGameCreatePrivateRoomRequest) returns (.rpc.api.ComboCardGameCreatePrivateRoomResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (options.check_option.error) = { error_codes: ERROR_CODE_MULTI_GAME_REMATCH_EXPIRED };
+    option (google.api.http) = { post: "/ComboCardGame/CreatePrivateRoom", body: "*" };
+  }
+  rpc Start (.rpc.api.ComboCardGameStartRequest) returns (.rpc.api.ComboCardGameStartResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ComboCardGame/Start", body: "*" };
+  }
+  rpc Finish (.rpc.api.ComboCardGameFinishRequest) returns (.rpc.api.ComboCardGameFinishResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ComboCardGame/Finish", body: "*" };
+  }
+  rpc GetRankingInfo (.google.protobuf.Empty) returns (.rpc.api.ComboCardGameGetRankingInfoResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ComboCardGame/GetRankingInfo", body: "*" };
+  }
+  rpc ListUserInfo (.rpc.api.ComboCardGameListUserInfoRequest) returns (.rpc.api.ComboCardGameListUserInfoResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ComboCardGame/ListUserInfo", body: "*" };
+  }
+}

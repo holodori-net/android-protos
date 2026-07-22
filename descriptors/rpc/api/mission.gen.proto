@@ -1,0 +1,59 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "options/check_option.proto";
+import "rpc/api/common/mission.gen.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message MissionReceiveRewardRequest {
+  string mission_pass_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated .rpc.api.common.Mission missions = 2 [(buf.validate.field) = { repeated: { min_items: 1, max_items: 200 } }];
+}
+
+message MissionReceiveRewardResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MissionReceivePassRewardRequest {
+  string mission_pass_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  repeated int32 normal_levels = 2 [(buf.validate.field) = { repeated: { min_items: 0, max_items: 200, items: { int32: { gte: 1 } } } }];
+  repeated int32 premium_levels = 3 [(buf.validate.field) = { repeated: { min_items: 0, max_items: 200, items: { int32: { gte: 1 } } } }];
+}
+
+message MissionReceivePassRewardResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message MissionPurchasePassLevelRequest {
+  string mission_pass_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  int32 level = 2 [(buf.validate.field) = { int32: { gte: 1 } }];
+}
+
+message MissionPurchasePassLevelResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service Mission {
+  rpc ReceiveReward (.rpc.api.MissionReceiveRewardRequest) returns (.rpc.api.MissionReceiveRewardResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Mission/ReceiveReward", body: "*" };
+  }
+  rpc ReceivePassReward (.rpc.api.MissionReceivePassRewardRequest) returns (.rpc.api.MissionReceivePassRewardResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Mission/ReceivePassReward", body: "*" };
+  }
+  rpc PurchasePassLevel (.rpc.api.MissionPurchasePassLevelRequest) returns (.rpc.api.MissionPurchasePassLevelResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Mission/PurchasePassLevel", body: "*" };
+  }
+}

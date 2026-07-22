@@ -1,0 +1,243 @@
+// Generated from APK FileDescriptorProto; original .proto source was not recovered.
+syntax = "proto3";
+
+package rpc.api;
+
+import "buf/validate/validate.proto";
+import "common/consumption.gen.proto";
+import "common/reward.gen.proto";
+import "entity/master/options/master.proto";
+import "enums/park_fishing_fish_weight_type.gen.proto";
+import "enums/park_high_low_hand_type.gen.proto";
+import "enums/park_lottery_reward_rarity_type.gen.proto";
+import "enums/park_time_period_type.gen.proto";
+import "enums/poster_booth_resource_type.gen.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "options/check_option.proto";
+import "rpc/api/common/park.gen.proto";
+import "rpc/api/common/response.gen.proto";
+import "rpc/api/common/reward.gen.proto";
+
+option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
+option csharp_namespace = "Vision.Common.Proto.Api";
+
+message ParkPermanenceSetPosterBoothRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+  repeated .rpc.api.ParkPermanenceSetPosterBoothRequest.PosterBoothResource resources = 2 [(buf.validate.field) = { repeated: { min_items: 1, max_items: 4 } }];
+  message PosterBoothResource {
+    .enums.PosterBoothResourceType resource_type = 1 [(buf.validate.field) = { enum: { defined_only: true } }];
+    string resource_id = 2;
+  }
+}
+
+message ParkPermanenceLevelUpFacilityRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+}
+
+message ParkPermanenceReceivePresentRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+  string character_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkPermanenceReceivePresentResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceCharacterShopItem {
+  string park_character_shop_item_id = 1 [(options.master.fk) = "ParkCharacterShopItem:id"];
+  repeated .common.Reward rewards = 2;
+  string sd_costume_id = 3 [(options.master.fk) = "SdCostume:id"];
+  string asset_id = 4;
+}
+
+message ParkPermanenceCharacterShopItemWithCollectedInfo {
+  .rpc.api.ParkPermanenceCharacterShopItem item = 1;
+  bool is_collected = 2;
+}
+
+message ParkPermanenceListCharacterShopItemRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+}
+
+message ParkPermanenceListCharacterShopItemResponse {
+  string shop_name = 1;
+  .common.Consumption consumption = 2;
+  repeated .rpc.api.ParkPermanenceCharacterShopItemWithCollectedInfo item_infos = 3;
+  repeated .rpc.api.ParkPermanenceCharacterShopItem picked_items = 4;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanencePurchaseCharacterShopItemRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+}
+
+message ParkPermanencePurchaseCharacterShopItemResponse {
+  repeated .rpc.api.ParkPermanenceCharacterShopItem picked_items = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceSelectCharacterShopItemRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+  string park_character_shop_item_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkPermanenceSelectCharacterShopItemResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  repeated .rpc.api.ParkPermanenceCharacterShopItemWithCollectedInfo item_infos = 2;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceDrawLotteryRequest {
+  string park_lottery_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkPermanenceDrawLotteryResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .enums.ParkLotteryRewardRarityType reward_rarity_type = 2;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceStartHighLowRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+}
+
+message ParkPermanenceFinishHighLowRequest {
+  .enums.ParkHighLowHandType hand_type = 1 [(buf.validate.field) = { enum: { defined_only: true } }];
+  bool is_reward_get = 2;
+  int32 double_up_success_count = 3 [(buf.validate.field) = { int32: { lte: 100, gte: 0 } }];
+}
+
+message ParkPermanenceFinishHighLowResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  bool is_first_achieved_hand_type = 2;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanencePrepareFishingRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+  .enums.ParkTimePeriodType park_time_period_type = 2 [(buf.validate.field) = { enum: { defined_only: true, not_in: 0 } }];
+  string park_fishing_bait_id = 3 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkPermanencePrepareFishingResponse {
+  string park_fishing_fish_id = 1 [(options.master.fk) = "ParkFishingFish:id"];
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceStartFishingRequest {
+  string park_fishing_fish_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkPermanenceMissFishingRequest {
+  string park_fishing_fish_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
+message ParkPermanenceFinishFishingRequest {
+  string park_fishing_fish_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+  bool is_success = 2;
+}
+
+message ParkPermanenceFinishFishingResponse {
+  int32 fish_weight = 1;
+  .enums.ParkFishingFishWeightType fish_weight_type = 2;
+  repeated .rpc.api.common.RewardResult reward_results = 3;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceReceiveFishingTotalCaughtRewardResponse {
+  repeated .rpc.api.common.RewardResult reward_results = 1;
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceLevelUpFishingRodRequest {
+  .rpc.api.common.ParkPermanenceCommonRequestParam park_permanence_common_request_param = 1;
+}
+
+message ParkPermanenceSetPosterBoothResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceLevelUpFacilityResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceStartHighLowResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceStartFishingResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceMissFishingResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkPermanenceLevelUpFishingRodResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+service ParkPermanence {
+  rpc SetPosterBooth (.rpc.api.ParkPermanenceSetPosterBoothRequest) returns (.rpc.api.ParkPermanenceSetPosterBoothResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/SetPosterBooth", body: "*" };
+  }
+  rpc LevelUpFacility (.rpc.api.ParkPermanenceLevelUpFacilityRequest) returns (.rpc.api.ParkPermanenceLevelUpFacilityResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/LevelUpFacility", body: "*" };
+  }
+  rpc ReceivePresent (.rpc.api.ParkPermanenceReceivePresentRequest) returns (.rpc.api.ParkPermanenceReceivePresentResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/ReceivePresent", body: "*" };
+  }
+  rpc ListCharacterShopItem (.rpc.api.ParkPermanenceListCharacterShopItemRequest) returns (.rpc.api.ParkPermanenceListCharacterShopItemResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/ListCharacterShopItem", body: "*" };
+  }
+  rpc PurchaseCharacterShopItem (.rpc.api.ParkPermanencePurchaseCharacterShopItemRequest) returns (.rpc.api.ParkPermanencePurchaseCharacterShopItemResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/PurchaseCharacterShopItem", body: "*" };
+  }
+  rpc SelectCharacterShopItem (.rpc.api.ParkPermanenceSelectCharacterShopItemRequest) returns (.rpc.api.ParkPermanenceSelectCharacterShopItemResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/SelectCharacterShopItem", body: "*" };
+  }
+  rpc DrawLottery (.rpc.api.ParkPermanenceDrawLotteryRequest) returns (.rpc.api.ParkPermanenceDrawLotteryResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/DrawLottery", body: "*" };
+  }
+  rpc StartHighLow (.rpc.api.ParkPermanenceStartHighLowRequest) returns (.rpc.api.ParkPermanenceStartHighLowResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/StartHighLow", body: "*" };
+  }
+  rpc FinishHighLow (.rpc.api.ParkPermanenceFinishHighLowRequest) returns (.rpc.api.ParkPermanenceFinishHighLowResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkPermanence/FinishHighLow", body: "*" };
+  }
+  rpc PrepareFishing (.rpc.api.ParkPermanencePrepareFishingRequest) returns (.rpc.api.ParkPermanencePrepareFishingResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/PrepareFishing", body: "*" };
+  }
+  rpc StartFishing (.rpc.api.ParkPermanenceStartFishingRequest) returns (.rpc.api.ParkPermanenceStartFishingResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/StartFishing", body: "*" };
+  }
+  rpc MissFishing (.rpc.api.ParkPermanenceMissFishingRequest) returns (.rpc.api.ParkPermanenceMissFishingResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkPermanence/MissFishing", body: "*" };
+  }
+  rpc FinishFishing (.rpc.api.ParkPermanenceFinishFishingRequest) returns (.rpc.api.ParkPermanenceFinishFishingResponse) {
+    option (options.check_option.check) = { disabled_master_version: true, enabled_response_cache: true, enabled_request_signature: true };
+    option (google.api.http) = { post: "/ParkPermanence/FinishFishing", body: "*" };
+  }
+  rpc ReceiveFishingTotalCaughtReward (.google.protobuf.Empty) returns (.rpc.api.ParkPermanenceReceiveFishingTotalCaughtRewardResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/ReceiveFishingTotalCaughtReward", body: "*" };
+  }
+  rpc LevelUpFishingRod (.rpc.api.ParkPermanenceLevelUpFishingRodRequest) returns (.rpc.api.ParkPermanenceLevelUpFishingRodResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/ParkPermanence/LevelUpFishingRod", body: "*" };
+  }
+}
