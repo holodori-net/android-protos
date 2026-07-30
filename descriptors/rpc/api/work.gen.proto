@@ -16,7 +16,7 @@ option go_package = "github.com/qua-vision/vision-server/pkg/pb/rpc/api";
 option csharp_namespace = "Vision.Common.Proto.Api";
 
 message WorkListWorkSlotPowerRequest {
-  repeated .rpc.api.WorkSlot slots = 1 [(buf.validate.field) = { repeated: { min_items: 1 } }];
+  repeated .rpc.api.WorkSlot slots = 1 [(buf.validate.field) = { repeated: { min_items: 1, max_items: 30 } }];
 }
 
 message WorkListWorkSlotPowerResponse {
@@ -29,7 +29,7 @@ message WorkListWorkSlotPowerResponse {
 }
 
 message WorkStartRequest {
-  repeated .rpc.api.WorkSlot slots = 1 [(buf.validate.field) = { repeated: { min_items: 1 } }];
+  repeated .rpc.api.WorkSlot slots = 1 [(buf.validate.field) = { repeated: { min_items: 1, max_items: 30 } }];
 }
 
 message WorkSlot {

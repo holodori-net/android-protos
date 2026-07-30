@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "requestedVersion": "1.0.0",
+  "requestedVersion": "1.0.100",
   "app": {
-    "versionName": "1.0.0",
-    "versionCode": 1783590150
+    "versionName": "1.0.100",
+    "versionCode": 1785215849
   },
-  "archiveSha256": "7afdbbb92db1b5f466b850330af1ae70cbdbcee82c2b599a0b2c48af3fb600ee",
+  "archiveSha256": "b5712ec639d69c8e057ee66bcfa38fac0e2fe6e68f440eccd7938a31306aafb8",
   "inputs": {
-    "il2cpp": "57edec8e9c3a3a3168d92a8f5071fe70a17a4e0994958a52c106e854479c80f5",
-    "metadata": "26f2cf63f5e93bc6160fb1b6d9a8a4e02ddf0c082e1405635f9770f703024894",
-    "literals": "35b93905067be2dd38df71a3f9066a7e7c24c7b666dfbb4f71b19a77763fd9d5",
-    "methods": "6e86c59a3f0dca802fe8fd3b9d057596668fa4c2c0a4effdb1ac4a81e37e112b",
-    "fields": "7aa3b650c6ad4bc3b893deadce019097862460347b7f899f0ef24eb6db647922"
+    "il2cpp": "bfb12cf9df45c392c8adcf1d338e1847637a34d72a85d771b955675ab491c8fb",
+    "metadata": "31dba74b6225bc52c476f86ce2d3eb2fa50dfdea752d433ed2890aa815322a8f",
+    "literals": "310fe25e5e77cd9e414eb5ed6c7ed1a49f110ff64549315ee058ec96d974f3a7",
+    "methods": "21826f4a52d45c98cd2506f8c634e7e09a823786596b24aafb50d6e02353eaa1",
+    "fields": "a358a02f2faf8f12a8120244891733c011ed06cc10a6f52db8b1ab36507b6b20"
   },
   "tools": {
     "node": "v24.20.0",
@@ -26,11 +26,11 @@
     }
   },
   "counts": {
-    "methods": 241517,
-    "literals": 47648,
+    "methods": 241627,
+    "literals": 47682,
     "fields": 2,
-    "descriptors": 596,
-    "protoSources": 596
+    "descriptors": 597,
+    "protoSources": 597
   },
   "validation": {
     "protoSources": {
@@ -44,7 +44,7 @@
     "manifest": "manifest.json",
     "descriptorSet": {
       "path": "descriptor-set.pb",
-      "sha256": "3a7550b1bce7f3ef7fcc125a7ea2b935ca01adfb9361646fa4e6ec58c48b3673"
+      "sha256": "7c513ec0a33f1690b1248f94f9a90cd1599337d3de2651ae918907952e6e11b0"
     },
     "descriptors": "descriptors"
   }
