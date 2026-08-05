@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "requestedVersion": "1.0.100",
+  "requestedVersion": "1.0.101",
   "app": {
-    "versionName": "1.0.100",
-    "versionCode": 1785215849
+    "versionName": "1.0.101",
+    "versionCode": 1785726883
   },
-  "archiveSha256": "b5712ec639d69c8e057ee66bcfa38fac0e2fe6e68f440eccd7938a31306aafb8",
+  "archiveSha256": "5caafa21651fc4d8fc2dfa71de260a4382da176301847073a69a8d96f8ce1511",
   "inputs": {
-    "il2cpp": "bfb12cf9df45c392c8adcf1d338e1847637a34d72a85d771b955675ab491c8fb",
-    "metadata": "31dba74b6225bc52c476f86ce2d3eb2fa50dfdea752d433ed2890aa815322a8f",
-    "literals": "310fe25e5e77cd9e414eb5ed6c7ed1a49f110ff64549315ee058ec96d974f3a7",
-    "methods": "21826f4a52d45c98cd2506f8c634e7e09a823786596b24aafb50d6e02353eaa1",
-    "fields": "a358a02f2faf8f12a8120244891733c011ed06cc10a6f52db8b1ab36507b6b20"
+    "il2cpp": "f8ef3d16788038de6b22cc44b8b5aa368720ba18fc90640fca623d21a4539c4c",
+    "metadata": "c9e5e200f47b51e2931276690f40ace4998b5c65dc52a0685a6f4abba34cb2de",
+    "literals": "78c14e214e57ae188212012449117bf0877e6d81649d97ea8e8d33024433925e",
+    "methods": "952fb362de8393999287f6e77471440da4b5881aa1e3bbced44c53a4710d4388",
+    "fields": "45f6cbef0ce15fda6804af589b9240408b39e9cc910c68724091ae4a32f6efad"
   },
   "tools": {
     "node": "v24.20.0",
@@ -26,7 +26,7 @@
     }
   },
   "counts": {
-    "methods": 241627,
+    "methods": 241636,
     "literals": 47682,
     "fields": 2,
     "descriptors": 597,
