@@ -3,15 +3,14 @@ syntax = "proto3";
 
 package entity.master;
 
+import "common/reward.gen.proto";
 import "entity/master/options/master.proto";
 
 option go_package = "github.com/qua-vision/vision-server/pkg/pb/master";
 option csharp_namespace = "Vision.Common.Proto.Master";
 
-message ParkPosition {
+message ChaseScoreReward {
   option (options.master.table) = true;
-  string id = 1 [(options.master.pk) = true];
-  string area_id = 2 [(options.master.fk) = "Area:id"];
-  string facility_id = 3 [(options.master.fk) = "Facility:id", (options.master.optional) = true];
-  string position = 4 [(options.master.optional) = true];
+  int64 score_gte = 1 [(options.master.pk) = true];
+  repeated .common.SimplifiedReward rewards = 1000 [(options.master.optional) = true];
 }
