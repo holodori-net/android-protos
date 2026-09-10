@@ -1,23 +1,23 @@
 {
   "schemaVersion": 1,
-  "requestedVersion": "1.1.0",
+  "requestedVersion": "1.1.1",
   "app": {
-    "versionName": "1.1.0",
-    "versionCode": 1787028384
+    "versionName": "1.1.1",
+    "versionCode": 1788354987
   },
-  "archiveSha256": "097fc849e9a1c016048225f63f7256fb40dc7c14b766878b9ae8f74363019659",
+  "archiveSha256": "571467a0c7b1e5b4442e403d6aa4089eeaa60e506ce21ab9c332c0dc707df851",
   "inputs": {
-    "il2cpp": "47252613098f544ced121a5f03186899e79bde7cc1653fb7cf65ffe2a9acbc43",
-    "metadata": "16e6905f7a0dc8ee6121982bd1b162181d14e822e6a7b65a838d70e86d173693",
-    "literals": "64cbbdd07c7f6a074fee4c0c4345e6e6e9ad5687acef8484584fee155b7863fb",
-    "methods": "7d64b680c2f2081ef11f7e8798bbe87ba8a57ef364402357a7969c8ad8d9b878",
-    "fields": "0eb42ce37c03472fb97c763a9669d188b4d9ef29b3e86a8a2992298133506453"
+    "il2cpp": "e8be905ac88050c7a038c043949c9318950a082446246d1306b3a0911618014e",
+    "metadata": "687092b85d38a363dd805a2f9199000d3694f78883e457170ea1d4491c703acd",
+    "literals": "13daa30b6a35c1f28d77dd8d946b92fd8318430ffdae7e1322e08d570a4c6ef5",
+    "methods": "825fd12d9f90c4abe3502241ff670e17cdc428aa9f6e9b0baaed13ffccfd6e0e",
+    "fields": "c8bc9e4258d1a1ed6b0b124f28ff8fbc0a1e01b358a00c0dcf9017130c1df76b"
   },
   "tools": {
     "node": "v26.10.0",
     "indexer": {
       "command": "il2cppdumper",
-      "version": "Il2CppDumper v6.7.46+unity6-pr922 source commit 24d8241b76ae79bbca92abc64aca00f66b3f11ce sha256 3cafe011d9b9fe6920b7b6abb9755b5bf6c99ca79bb9fc1e3bafa54fe81cd5d5"
+      "version": "Il2CppDumper repository https://github.com/vmpprotect/Il2CppDumper.git ref master commit 24d8241b76ae79bbca92abc64aca00f66b3f11ce framework net8.0 dotnet-sdk 10.0.401"
     },
     "protoc": {
       "status": "validated",
@@ -26,8 +26,8 @@
     }
   },
   "counts": {
-    "methods": 248369,
-    "literals": 48696,
+    "methods": 248425,
+    "literals": 48718,
     "fields": 2,
     "descriptors": 600,
     "protoSources": 600
@@ -44,7 +44,7 @@
     "manifest": "manifest.json",
     "descriptorSet": {
       "path": "descriptor-set.pb",
-      "sha256": "6e5229ba40bea800d79a1ceafc6f931f1185d461b1f02ccdc9bc9fc2eca45f45"
+      "sha256": "b46ce00430af4bee95c82981749d62576d9f944b62208dc7e7f8df605b04210a"
     },
     "descriptors": "descriptors"
   }
