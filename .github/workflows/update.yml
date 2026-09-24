@@ -50,7 +50,7 @@ jobs:
       - name: Check out private extraction source
         uses: actions/checkout@v7
         with:
-          repository: ${{ vars.CONTRACT_SOURCE_REPOSITORY || 'holodori/contract-extraction' }}
+          repository: ${{ vars.CONTRACT_SOURCE_REPOSITORY || 'holodori-net/extract-protos' }}
           ref: ${{ inputs.source_ref || vars.CONTRACT_SOURCE_REF || 'main' }}
           ssh-key: ${{ secrets.SOURCE_REPO_SSH_KEY }}
           persist-credentials: false
