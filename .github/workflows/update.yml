@@ -57,6 +57,7 @@ jobs:
           path: source
 
       - name: Extract and publish contract
+        id: contract
         uses: ./source
         with:
           target-path: ${{ github.workspace }}/repo
@@ -67,3 +68,32 @@ jobs:
           il2cpp-dumper-ref: ${{ inputs.il2cpp_dumper_ref || 'master' }}
           node-image: ${{ inputs.node_image || 'node:current-slim' }}
           dotnet-sdk-image: ${{ inputs.dotnet_sdk_image || 'mcr.microsoft.com/dotnet/sdk:latest' }}
+
+      - name: Dispatch SDK contract sync
+        if: steps.contract.outputs.published == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.APIS_DISPATCH_TOKEN }}
+          VERSION_NAME: ${{ steps.contract.outputs.version-name }}
+          VERSION_CODE: ${{ steps.contract.outputs.version-code }}
+        shell: bash
+        run: |
+          if [[ -z "$GH_TOKEN" ]]; then
+            echo "APIS_DISPATCH_TOKEN is required to notify the SDK repository." >&2
+            exit 1
+          fi
+
+          source_commit=$(git -C repo rev-parse HEAD)
+          if [[ ! "$source_commit" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "The published contract commit is not a full SHA." >&2
+            exit 1
+          fi
+          if [[ ! "$VERSION_NAME" =~ ^[0-9A-Za-z][0-9A-Za-z._+-]*$ || ! "$VERSION_CODE" =~ ^[0-9]+$ ]]; then
+            echo "The published contract version is invalid." >&2
+            exit 1
+          fi
+
+          gh api --method POST repos/holodori-net/apis/dispatches \
+            -f event_type=android-protos-published \
+            -f "client_payload[source_commit]=$source_commit" \
+            -f "client_payload[version_name]=$VERSION_NAME" \
+            -f "client_payload[version_code]=$VERSION_CODE"
