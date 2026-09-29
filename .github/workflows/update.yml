@@ -12,7 +12,7 @@ on:
         description: Private source ref (blank uses CONTRACT_SOURCE_REF or main)
         default: ""
       app_version:
-        description: App version name, or latest
+        description: Expected current Play version name, or latest
         default: latest
       force:
         description: Rebuild even when versionCode matches
@@ -60,6 +60,8 @@ jobs:
         id: contract
         uses: ./source
         with:
+          google-play-email: ${{ secrets.PLAY_ACCOUNT_EMAIL }}
+          google-play-aas-token: ${{ secrets.PLAY_AAS_TOKEN }}
           target-path: ${{ github.workspace }}/repo
           target-branch: ${{ inputs.target_branch || vars.CONTRACT_PUBLISH_BRANCH || 'main' }}
           app-version: ${{ inputs.app_version || 'latest' }}
