@@ -149,6 +149,10 @@ message ParkSelectAreaRequest {
   string area_id = 2 [(buf.validate.field) = { string: { min_bytes: 1 } }];
 }
 
+message ParkReadEmotionRequest {
+  string character_id = 1 [(buf.validate.field) = { string: { min_bytes: 1 } }];
+}
+
 message ParkRefreshResponse {
   .rpc.api.common.Response common_response = 9999;
 }
@@ -174,6 +178,10 @@ message ParkReportActionResponse {
 }
 
 message ParkSelectAreaResponse {
+  .rpc.api.common.Response common_response = 9999;
+}
+
+message ParkReadEmotionResponse {
   .rpc.api.common.Response common_response = 9999;
 }
 
@@ -229,5 +237,9 @@ service Park {
   rpc SelectArea (.rpc.api.ParkSelectAreaRequest) returns (.rpc.api.ParkSelectAreaResponse) {
     option (options.check_option.check) = { enabled_response_cache: true };
     option (google.api.http) = { post: "/Park/SelectArea", body: "*" };
+  }
+  rpc ReadEmotion (.rpc.api.ParkReadEmotionRequest) returns (.rpc.api.ParkReadEmotionResponse) {
+    option (options.check_option.check) = { enabled_response_cache: true };
+    option (google.api.http) = { post: "/Park/ReadEmotion", body: "*" };
   }
 }

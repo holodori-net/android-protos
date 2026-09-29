@@ -10,6 +10,11 @@ option go_package = "github.com/qua-vision/vision-server/pkg/pb/options/multi_ga
 
 message MessageOption {
   .enums.MultiGameType multi_game_type = 1;
+  .options.multi_game_result.MessageOption.JsonFieldNameType json_field_name_type = 2;
+  enum JsonFieldNameType {
+    UNKNOWN = 0;
+    GO_FIELD_NAME = 1;
+  }
 }
 
 extend .google.protobuf.MessageOptions {

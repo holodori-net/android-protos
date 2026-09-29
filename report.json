@@ -1,20 +1,24 @@
 {
   "schemaVersion": 1,
-  "requestedVersion": "1.1.1",
+  "requestedVersion": "1.2.0",
   "app": {
-    "versionName": "1.1.1",
-    "versionCode": 1788354987
+    "versionName": "1.2.0",
+    "versionCode": 1789620987
   },
-  "archiveSha256": "571467a0c7b1e5b4442e403d6aa4089eeaa60e506ce21ab9c332c0dc707df851",
+  "archiveSha256": "7a29cb57f2e2927ba075e7ab83398f98fe6b808676c63fba32808d66d573437b",
   "inputs": {
-    "il2cpp": "e8be905ac88050c7a038c043949c9318950a082446246d1306b3a0911618014e",
-    "metadata": "687092b85d38a363dd805a2f9199000d3694f78883e457170ea1d4491c703acd",
-    "literals": "13daa30b6a35c1f28d77dd8d946b92fd8318430ffdae7e1322e08d570a4c6ef5",
-    "methods": "825fd12d9f90c4abe3502241ff670e17cdc428aa9f6e9b0baaed13ffccfd6e0e",
-    "fields": "c8bc9e4258d1a1ed6b0b124f28ff8fbc0a1e01b358a00c0dcf9017130c1df76b"
+    "il2cpp": "4d9be1785d10630077f56c631faff80905438ee8f1f03e9b4dcb6dc7f429fc5f",
+    "metadata": "0e98642cbadd29d55778012d3ea10b9365d22533f7d433cf885c0dbb51a8dff6",
+    "literals": "8420a12822921cb547108a1ec7a9df2a48643aaac120029642af3adbe946d312",
+    "methods": "efdce7c4c484121b2a4ef36ed358691d11f4cbba0b94bcfdace6dc49a9d8ebe0",
+    "fields": "6f8b362a360f94c0de547018cbc0b6eb492104ef8d862b9bbf91d15258969f26"
   },
   "tools": {
     "node": "v26.10.0",
+    "acquisition": {
+      "goopdl": "goopdl 1.2.1",
+      "aapt": "Android Asset Packaging Tool, v0.2-debian"
+    },
     "indexer": {
       "command": "il2cppdumper",
       "version": "Il2CppDumper repository https://github.com/vmpprotect/Il2CppDumper.git ref master commit 24d8241b76ae79bbca92abc64aca00f66b3f11ce framework net8.0 dotnet-sdk 10.0.401"
@@ -26,11 +30,11 @@
     }
   },
   "counts": {
-    "methods": 248425,
-    "literals": 48718,
+    "methods": 250734,
+    "literals": 49936,
     "fields": 2,
-    "descriptors": 600,
-    "protoSources": 600
+    "descriptors": 612,
+    "protoSources": 612
   },
   "validation": {
     "protoSources": {
@@ -44,7 +48,7 @@
     "manifest": "manifest.json",
     "descriptorSet": {
       "path": "descriptor-set.pb",
-      "sha256": "b46ce00430af4bee95c82981749d62576d9f944b62208dc7e7f8df605b04210a"
+      "sha256": "1888a6392892dab8d7a3385fbd80f597b027b95237e600edc6f8f58ee43e9c98"
     },
     "descriptors": "descriptors"
   }
