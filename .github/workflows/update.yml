@@ -41,6 +41,11 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.contract.outputs.published }}
+      version-name: ${{ steps.contract.outputs.version-name }}
+      version-code: ${{ steps.contract.outputs.version-code }}
+      source-commit: ${{ steps.published_commit.outputs.source-commit }}
     steps:
       - name: Check out public data repository
         uses: actions/checkout@v7
@@ -71,12 +76,25 @@ jobs:
           node-image: ${{ inputs.node_image || 'node:current-slim' }}
           dotnet-sdk-image: ${{ inputs.dotnet_sdk_image || 'mcr.microsoft.com/dotnet/sdk:latest' }}
 
-      - name: Dispatch SDK contract sync
+      - name: Capture published contract commit
+        id: published_commit
         if: steps.contract.outputs.published == 'true'
+        shell: bash
+        run: |
+          source_commit=$(git -C repo rev-parse HEAD)
+          echo "source-commit=$source_commit" >> "$GITHUB_OUTPUT"
+
+  notify:
+    needs: update
+    if: needs.update.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch SDK contract sync
         env:
           GH_TOKEN: ${{ secrets.APIS_DISPATCH_TOKEN }}
-          VERSION_NAME: ${{ steps.contract.outputs.version-name }}
-          VERSION_CODE: ${{ steps.contract.outputs.version-code }}
+          VERSION_NAME: ${{ needs.update.outputs.version-name }}
+          VERSION_CODE: ${{ needs.update.outputs.version-code }}
+          SOURCE_COMMIT: ${{ needs.update.outputs.source-commit }}
         shell: bash
         run: |
           if [[ -z "$GH_TOKEN" ]]; then
@@ -84,8 +102,7 @@ jobs:
             exit 1
           fi
 
-          source_commit=$(git -C repo rev-parse HEAD)
-          if [[ ! "$source_commit" =~ ^[0-9a-f]{40}$ ]]; then
+          if [[ ! "$SOURCE_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
             echo "The published contract commit is not a full SHA." >&2
             exit 1
           fi
@@ -96,6 +113,6 @@ jobs:
 
           gh api --method POST repos/holodori-net/apis/dispatches \
             -f event_type=android-protos-published \
-            -f "client_payload[source_commit]=$source_commit" \
+            -f "client_payload[source_commit]=$SOURCE_COMMIT" \
             -f "client_payload[version_name]=$VERSION_NAME" \
             -f "client_payload[version_code]=$VERSION_CODE"

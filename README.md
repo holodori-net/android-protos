@@ -14,4 +14,7 @@ Generated Android Unity IL2CPP contracts for Holodori.
 When a new descriptor is published, the update workflow dispatches
 `android-protos-published` to `holodori-net/apis`. Configure the
 `APIS_DISPATCH_TOKEN` repository secret with Contents write access to that
-repository.
+repository. If the notification fails, rerun the failed `notify` job from the
+workflow run; the `update` job's published version and commit are passed to it.
+A successful dispatch means GitHub accepted the event, not that the downstream
+workflow completed successfully.
