@@ -12,10 +12,10 @@ on:
         description: Private source ref (blank uses CONTRACT_SOURCE_REF or main)
         default: ""
       app_version:
-        description: Expected current Play version name, or latest
+        description: Expected current Google Play versionName, or latest
         default: latest
       force:
-        description: Rebuild even when versionCode matches
+        description: Rebuild even when Google Play versionCode matches
         type: boolean
         default: false
       il2cpp_dumper_repository:

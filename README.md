@@ -4,12 +4,18 @@ Generated Android Unity IL2CPP contracts for Holodori.
 
 ## Outputs
 
-- `manifest.json`: application version and public keys.
+- `manifest.json`: application `versionCode`, display `versionName`, and public keys.
 - `descriptor-set.pb`: authoritative protobuf descriptor set.
 - `descriptors/`: readable protobuf definitions.
 - `report.json`: validation results and resolved tool versions.
 
 ## Publishing
+
+The update workflow checks for a new Google Play `versionCode` on its schedule
+and can also be started with `workflow_dispatch`. `versionName` is displayed as
+the application version; automatic update checks use `versionCode`. Set the
+workflow's `force` input to rebuild when the published `versionCode` is
+unchanged.
 
 When a new descriptor is published, the update workflow dispatches
 `android-protos-published` to `holodori-net/apis`. Configure the
